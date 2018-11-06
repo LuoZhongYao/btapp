@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal" >
+
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4" >
+
+        <RelativeLayout
+                android:id="@+id/rl_downloading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" >
+
+            <ImageView
+                    android:id="@+id/flag_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_match_bg" />
+
+            <ImageView
+                    android:id="@+id/image_animation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/flag_center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:src="@drawable/ic_donwloading"/>
+
+            <TextView
+                    android:id="@+id/tv_contacts_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/flag_center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp"
+                    android:textSize="23sp" />
+        </RelativeLayout>
+
+        <ListView
+                android:id="@+id/lv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                android:scrollbars="@null"
+                android:visibility="gone" >
+        </ListView>
+
+
+        <TextView
+                android:id="@+id/tv_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="点击下载电话本"
+                android:textSize="23sp"
+                android:visibility="visible" />
+    </RelativeLayout>
+
+</LinearLayout>

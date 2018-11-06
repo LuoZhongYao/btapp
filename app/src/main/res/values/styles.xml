@@ -1,0 +1,58 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="DisplayEditTextStyle" parent="@android:style/Widget.Material.Light.EditText">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:cursorVisible">false</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:gravity">bottom|end</item>
+    </style>
+
+
+    <style name="PadButtonStyle" parent="@android:style/Widget.Material.Light.Button.Borderless">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:minWidth">0dip</item>
+        <item name="android:minHeight">0dip</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="DisplayEditTextStyle.Formula">
+        <!--
+        <item name="android:paddingTop">46dip</item>
+        <item name="android:paddingBottom">26dip</item>
+        <item name="android:paddingStart">44dip</item>
+        <item name="android:paddingEnd">44dip</item>
+        -->
+        <item name="android:textSize">48sp</item>
+    </style>
+
+    <style name="DisplayEditTextStyle.Result">
+        <!--
+        <item name="android:paddingTop">26dip</item>
+        <item name="android:paddingBottom">46dip</item>
+        <item name="android:paddingStart">44dip</item>
+        <item name="android:paddingEnd">44dip</item>
+        -->
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="PadButtonStyle.Numeric">
+        <item name="android:layout_margin">8dip</item>
+        <item name="android:layout_width">64dp</item>
+        <item name="android:textSize">48sp</item>
+        <item name="android:background">@drawable/dial_display_broder</item>
+    </style>
+
+</resources>

@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Bluetooth</string>
+    <string name="pincode">配对码</string>
+    <string name="devicename">设备名</string>
+    <string name="auto_connect">自动链接</string>
+    <string name="auto_answer">自动接听</string>
+    <string name="version">版本号:</string>
+    <string name="imei">IMEI:</string>
+    <string name="local_bdaddr">本地设备地址:</string>
+    <string name="backspace">退格</string>
+
+    <string name="connected_device">已链接的设备</string>
+    <string name="piared_device">已配对的设备</string>
+    <string name="search_device">附件的设备</string>
+
+    <string name="incoming">来电</string>
+    <string name="outgoing">拨号</string>
+    <string name="talking">通话中</string>
+
+</resources>

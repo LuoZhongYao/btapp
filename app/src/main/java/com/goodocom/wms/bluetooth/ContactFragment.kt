@@ -1,0 +1,65 @@
+package com.goodocom.wms.bluetooth
+
+
+import android.database.Cursor
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
+import android.widget.CursorAdapter
+import android.widget.SimpleCursorAdapter
+import com.goodocom.wms.bluetooth.port.BluetoothDevice
+import kotlinx.android.synthetic.main.fragment_contact.*
+
+
+class ContactFragment : Fragment(), Phonebook {
+    private var dev: BluetoothDeviceImpl? = null
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_contact, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (parentFragment is ProfileFragment)
+            dev = (parentFragment as ProfileFragment).dev
+        dev?.book = this
+        initView()
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun initView() {
+        tv_download.setOnClickListener {
+            dev?.SyncPhonebook()
+            rl_downloading.visibility = View.VISIBLE
+            lv_content.visibility = View.GONE
+            tv_download.visibility = View.GONE
+            val animation = TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
+                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0.8f)
+            animation.duration = 1000
+            animation.fillAfter = false
+            animation.repeatCount = -1
+            animation.repeatMode = Animation.RESTART
+            image_animation!!.startAnimation(animation)
+        }
+        lv_content.adapter = SimpleCursorAdapter(context!!,  R.layout.contact_item, null,
+            arrayOf("name", "number"), intArrayOf(R.id.tv_name, R.id.tv_number),
+            CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+    }
+
+    override fun onPbapStatus(status: BluetoothDevice.PbapStatus) {
+
+    }
+
+    override fun onPhonebookComplete(cursor: Cursor?) {
+        rl_downloading?.visibility = View.GONE
+        lv_content?.visibility = View.VISIBLE
+        cursor?.let {(lv_content?.adapter as SimpleCursorAdapter).changeCursor(it)}
+    }
+}

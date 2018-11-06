@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal" >
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+        <LinearLayout
+                android:id="@+id/ll_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible" >
+
+            <ImageView
+                    android:id="@+id/ib_call_in"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_phone" />
+
+            <ImageView
+                    android:id="@+id/ib_call_out"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_phone_forwarded" />
+
+            <ImageView
+                    android:id="@+id/ib_call_missed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_phone_missed" />
+        </LinearLayout>
+
+        <FrameLayout
+                android:id="@+id/fl_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="80dp"
+                android:paddingRight="80dp"
+                android:visibility="gone" >
+
+            <RelativeLayout
+                    android:id="@+id/rl_downloading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible" >
+
+                <ImageView
+                        android:id="@+id/flag_center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_match_bg" />
+
+                <ImageView
+                        android:id="@+id/image_animation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/flag_center"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/ic_donwloading" />
+            </RelativeLayout>
+
+            <android.support.v4.view.ViewPager
+                    android:id="@+id/vp_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" >
+            </android.support.v4.view.ViewPager>
+        </FrameLayout>
+
+        <TextView
+                android:id="@+id/tv_device_disconnect"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="请先连接设备"
+                android:textSize="23sp"
+                android:visibility="visible" />
+    </LinearLayout>
+</LinearLayout>
