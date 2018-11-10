@@ -5,11 +5,14 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import com.goodocom.wms.bluetooth.service.BluetoothService
+import com.goodocom.wms.bluetooth.utils.False
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 
-class SettingsFragment : Fragment(), LocalSettings {
+class SettingsFragment : Fragment(), LocalSettings, Id {
+    override var id: Long = 0L
     private val service: BluetoothService.BluetoothServiceImpl
         get() = (activity as MainActivity).service
 
@@ -35,6 +38,13 @@ class SettingsFragment : Fragment(), LocalSettings {
         auto_answer_switch.setOnCheckedChangeListener {_, checked ->
             if(checked) service.EnableAutoAnswer()
             else service.DisableAutoAnswer()
+        }
+
+        et_device_name.setOnFocusChangeListener { v, hasFocus ->
+            hasFocus.False { service.SetLocalName((v as EditText).text.toString()) }
+        }
+        et_pin_code.setOnFocusChangeListener { v, hasFocus ->
+            hasFocus.False { service.SetPinCode((v as EditText).text.toString()) }
         }
         super.onViewCreated(view, savedInstanceState)
     }

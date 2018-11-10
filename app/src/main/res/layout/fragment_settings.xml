@@ -14,27 +14,26 @@
             android:orientation="vertical"
             android:paddingLeft="100dp"
             android:paddingRight="100dp"
-            android:paddingTop="15dp">
+            android:paddingTop="10dp">
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/devicename"
-                android:textSize="25sp"/>
+                android:textSize="20sp"/>
 
         <EditText
                 android:id="@+id/et_device_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textNoSuggestions"
-                android:textSize="25sp"/>
+                android:textSize="20sp"/>
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:text="@string/pincode"
-                android:textSize="25sp"/>
+                android:textSize="20sp"/>
 
         <EditText
                 android:id="@+id/et_pin_code"
@@ -51,13 +50,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/auto_connect"
-                    android:textSize="23sp"/>
+                    android:textSize="15sp"/>
 
             <ToggleButton
                     android:id="@+id/auto_connect_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_alignParentEnd="true"
+                    android:textSize="15sp"
+                    android:background="@drawable/toggle_button"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -69,13 +70,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/auto_answer"
-                    android:textSize="23sp"/>
+                    android:textSize="15sp"/>
 
             <ToggleButton
                     android:id="@+id/auto_answer_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_alignParentEnd="true"
+                    android:textSize="15sp"
+                    android:background="@drawable/toggle_button"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -87,13 +90,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/imei"
-                    android:textSize="23sp"/>
+                    android:textSize="15sp"/>
 
             <TextView
                     android:id="@+id/tv_imei"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="23sp"/>
+                    android:textSize="15sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -105,12 +108,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/local_bdaddr"
-                    android:textSize="23sp"/>
+                    android:textSize="15sp"/>
             <TextView
                     android:id="@+id/tv_local_bdaddr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="23sp"/>
+                    android:textSize="15sp"/>
 
         </LinearLayout>
 
@@ -123,12 +126,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/version"
-                    android:textSize="23sp"/>
+                    android:textSize="15sp"/>
             <TextView
                     android:id="@+id/tv_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="23sp"/>
+                    android:textSize="15sp"/>
 
         </LinearLayout>
 

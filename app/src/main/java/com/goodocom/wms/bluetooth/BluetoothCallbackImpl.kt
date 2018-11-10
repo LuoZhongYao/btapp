@@ -3,6 +3,7 @@ package com.goodocom.wms.bluetooth
 class BluetoothCallbackImpl(private val activity: MainActivity) : IBluetoothCallback.Stub() {
     var settings: LocalSettings? = null
     var devs: DeviceList? = null
+    var search: Search? = null
 
     fun connectedDevices(dev: Array<BluetoothDeviceImpl>) {
        devs?.onConnectedDevice(dev)
@@ -10,8 +11,8 @@ class BluetoothCallbackImpl(private val activity: MainActivity) : IBluetoothCall
     override fun onDMAdd(bdaddr: String) = activity.dmAdd(bdaddr)
     override fun onDMRemove(bdaddr: String) = activity.dmRemove(bdaddr)
     override fun onInitComplete() {}
-    override fun onInquiryComplete() = activity.broadcast("search") { it.putExtra("complete", "complete") }
-    override fun onInquiryResult(bdaddr: String, name: String) = activity.broadcast("search") { it.putExtra("result", arrayOf(bdaddr, name)) }
+    override fun onInquiryComplete() { search?.onComplete()}
+    override fun onInquiryResult(bdaddr: String, name: String) { search?.onResult(name, bdaddr) }
     override fun onVersion(version: String) { settings?.onVersion(version) }
     override fun onLocalBdaddr(bdaddr: String) { settings?.onLocalBdaddr(bdaddr) }
     override fun onLocalName(name: String)  { settings?.onName(name) }

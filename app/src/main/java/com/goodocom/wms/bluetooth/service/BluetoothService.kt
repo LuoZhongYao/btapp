@@ -77,12 +77,11 @@ class BluetoothService : Service() {
 
         fun selected(bdaddr: String) {
             (bdaddr == INVALID).True { device.clear() }
-            ((device[bdaddr] == null)).True {dmAdd(bdaddr)}
+            ((device[bdaddr] == null)).True { device[bdaddr] = BluetoothDeviceImpl(bdaddr, this, io) }
             device[bdaddr]?.let {selected = it}
         }
 
         fun dmAdd(bdaddr: String) {
-            device[bdaddr] = BluetoothDeviceImpl(bdaddr, this, io)
             notify({ c, s -> c.onDMAdd(s) }, bdaddr)
         }
 
@@ -117,14 +116,14 @@ class BluetoothService : Service() {
     }
 
     private fun reset() {
+        mgmt.device.forEach { notify{c -> c.onDMRemove(it.value.bdaddr) } }
         mgmt = Mgmt()
         io.requestVersion()
         io.requestLocalPin()
         io.requestLocalAddress()
         io.requestLocalName()
         io.requestAutoConnectAnswer()
-        io.requestA2dpStatus()
-        io.requestHfpStatus()
+        io.requestLinkStatus()
     }
 
     fun pairlist(index: Int, bdaddr: String, name: String) {
@@ -210,8 +209,7 @@ class BluetoothService : Service() {
         fun requestPairList() = write("MX")
         fun requestLocalAddress() = write("DB")
         fun requestAutoConnectAnswer() = write("MF")
-        fun requestA2dpStatus() = write("")
-        fun requestHfpStatus() = write("CY")
+        fun requestLinkStatus() = write("AL")
         fun requestSearch() = write("SD")
         fun requestCancelSearch() = write("ST")
         fun requestEnableAutoConnect() = write("MG")
@@ -279,5 +277,6 @@ class BluetoothService : Service() {
         override fun DeviceDisconnect(bdaddr: String) = mgmt.device[bdaddr]!!.Disconnect()
         override fun DeviceSyncHistory(bdaddr: String) = mgmt.device[bdaddr]!!.SyncHistory()
         override fun DeviceSyncPhonebook(bdaddr: String) = mgmt.device[bdaddr]!!.SyncPhonebook()
+        override fun DeviceCancelSync(bdaddr: String) = mgmt.device[bdaddr]!!.CancelSync()
     }
 }

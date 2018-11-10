@@ -52,7 +52,7 @@
         <item name="android:layout_margin">8dip</item>
         <item name="android:layout_width">64dp</item>
         <item name="android:textSize">48sp</item>
-        <item name="android:background">@drawable/dial_display_broder</item>
+        <item name="android:background">@drawable/dial_key</item>
     </style>
 
 </resources>

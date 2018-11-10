@@ -54,4 +54,5 @@ interface IBluetoothService {
     void DeviceDisconnect(String bdaddr);
     void DeviceSyncPhonebook(String bdaddr);
     void DeviceSyncHistory(String bdaddr);
+    void DeviceCancelSync(String bdaddr);
 }

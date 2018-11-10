@@ -12,6 +12,7 @@ class BluetoothDeviceImpl(
     var media: Media? = null
     var call: Call? = null
     var book: Phonebook? = null
+    var history: History? = null
     private var db = Database(context, "Contact$bdaddr")
 
     override var signal: Int
@@ -78,6 +79,7 @@ class BluetoothDeviceImpl(
     override fun Disconnect() = service.DeviceDisconnect(bdaddr)
     override fun SyncPhonebook() = service.DeviceSyncPhonebook(bdaddr)
     override fun SyncHistory() = service.DeviceSyncHistory(bdaddr)
+    override fun CancelSync() = service.DeviceCancelSync(bdaddr)
 
     override fun onAvrcpAttribute(attr: List<String>) { media?.onAvrcpAttribute(attr) }
 
@@ -126,7 +128,7 @@ class BluetoothDeviceImpl(
     }
 
     override fun onHistoryItem(type: String, name: String, number: String, date: String) {
-        //db.insert()
+        history?.onHistoryItem(type, name, number, date)
     }
 
     override fun onPhonebookItem(name: String, number: String) {
@@ -134,10 +136,11 @@ class BluetoothDeviceImpl(
     }
 
     override fun onHistoryComplete() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        history?.onHistoryComplete()
     }
 
     override fun onPhonebookComplete() {
         book?.onPhonebookComplete(db.query())
     }
+
 }

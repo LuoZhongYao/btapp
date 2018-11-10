@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.goodocom.wms.bluetooth.service.BluetoothService
@@ -43,22 +42,18 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
     private fun updateFragment() {
         val ft = supportFragmentManager.beginTransaction()
+        (vp_main?.adapter as TabFragment).updateBaseId()
         tabItem.retainAll(fixedTab)
         device.forEach { tabItem.add(0, it.value.tabItem)}
         supportFragmentManager.fragments.forEach { ft.remove(it) }
-        ft.commit()
-        vp_content.adapter?.notifyDataSetChanged()
-        for (i in 0 until tl_tablayout.tabCount)
+        ft.commitAllowingStateLoss()
+        vp_main?.adapter?.notifyDataSetChanged()
+        for (i in 0 until tabItem.size)
             tl_tablayout.getTabAt(i)?.setIcon(tabItem[i].image)
-        vp_content.currentItem = 0
+        vp_main?.currentItem = 0
         tl_tablayout.getTabAt(0)?.let { it.select() }
         callback.connectedDevices(device.values.toTypedArray())
-    }
 
-    fun broadcast(action: String, gen: (intent: Intent) -> Unit) {
-        val intent = Intent(action)
-        gen(intent)
-        LocalBroadcastManager.getInstance(this.applicationContext).sendBroadcast(intent)
     }
 
     fun dmAdd(bdaddr: String) {
@@ -68,7 +63,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
             device.clear()
             updateFragment()
         } else if (device[bdaddr] == null) {
-            val dev = BluetoothDeviceImpl(this.applicationContext, bdaddr, service) { vp_content.adapter?.notifyDataSetChanged() }
+            val dev = BluetoothDeviceImpl(this.applicationContext, bdaddr, service) { vp_main.adapter?.notifyDataSetChanged() }
             service.devRegister(bdaddr, dev)
             device[bdaddr] = dev
             updateFragment()
@@ -94,22 +89,9 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     }
 
     private fun initView() {
-        tl_tablayout.setupWithViewPager(vp_content)
-        vp_content.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
-            override fun getItem(pos :Int): Fragment {
-                val fm = tabItem[pos].clazz.newInstance() as Fragment
-                when(fm) {
-                    is DevlistFragment -> { callback.devs = fm; fm.onConnectedDevice(device.values.toTypedArray())}
-                    is SettingsFragment -> callback.settings = fm
-                    is SearchFragment -> {}
-                    is ProfileFragment -> fm.dev = tabItem[pos].obj as BluetoothDeviceImpl
-                }
-                return fm
-            }
-            override fun getCount(): Int = tabItem.size
-            override fun getPageTitle(position: Int): CharSequence? = tabItem[position].getTitle()
-            override fun getItemPosition(`object`: Any): Int = POSITION_NONE
-        }
+        tl_tablayout.setupWithViewPager(vp_main)
+        vp_main.adapter = TabFragment()
+        vp_main.offscreenPageLimit = 8
 
         for (i in 0 until tl_tablayout.tabCount)
             tl_tablayout.getTabAt(i)?.setIcon(tabItem[i].image)
@@ -119,6 +101,27 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
         super.onDestroy()
         service.unregister(callback)
         unbindService(this)
+    }
+
+    inner class TabFragment: FragmentStatePagerAdapter(supportFragmentManager) {
+        private var id = 0L
+        override fun getItem(pos :Int): Fragment {
+            val fm = tabItem[pos].clazz.newInstance() as Id
+            fm.id = id
+            when(fm) {
+                is DevlistFragment -> { callback.devs = fm; fm.onConnectedDevice(device.values.toTypedArray())}
+                is SettingsFragment -> callback.settings = fm
+                is SearchFragment -> callback.search = fm
+                is ProfileFragment -> fm.dev = tabItem[pos].obj as BluetoothDeviceImpl
+            }
+            return fm as Fragment
+        }
+        fun updateBaseId() { id = id.plus(13) }
+        override fun getCount(): Int = tabItem.size
+        override fun getPageTitle(position: Int): CharSequence? = tabItem[position].getTitle()
+        override fun getItemPosition(`object`: Any): Int {
+            return if((`object` as Id).id == id) POSITION_UNCHANGED else POSITION_NONE
+        }
     }
 
     companion object {

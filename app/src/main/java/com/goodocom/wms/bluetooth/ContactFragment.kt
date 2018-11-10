@@ -34,11 +34,12 @@ class ContactFragment : Fragment(), Phonebook {
     }
 
     private fun initView() {
-        tv_download.setOnClickListener {
+        btn_sync.setOnClickListener {
             dev?.SyncPhonebook()
             rl_downloading.visibility = View.VISIBLE
             lv_content.visibility = View.GONE
-            tv_download.visibility = View.GONE
+            btn_sync.visibility = View.GONE
+            btn_cancel.visibility = View.VISIBLE
             val animation = TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0.8f)
@@ -47,6 +48,10 @@ class ContactFragment : Fragment(), Phonebook {
             animation.repeatCount = -1
             animation.repeatMode = Animation.RESTART
             image_animation!!.startAnimation(animation)
+        }
+
+        btn_cancel.setOnClickListener {
+            dev?.CancelSync()
         }
         lv_content.adapter = SimpleCursorAdapter(context!!,  R.layout.contact_item, null,
             arrayOf("name", "number"), intArrayOf(R.id.tv_name, R.id.tv_number),
@@ -59,6 +64,8 @@ class ContactFragment : Fragment(), Phonebook {
 
     override fun onPhonebookComplete(cursor: Cursor?) {
         rl_downloading?.visibility = View.GONE
+        btn_cancel?.visibility = View.GONE
+        btn_sync?.visibility = View.VISIBLE
         lv_content?.visibility = View.VISIBLE
         cursor?.let {(lv_content?.adapter as SimpleCursorAdapter).changeCursor(it)}
     }

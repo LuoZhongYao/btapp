@@ -64,6 +64,8 @@ class BluetoothInd(val service: BluetoothService)
         ind["PS"] = { service.mgmt.selected.signal(it.substring(0, 2)); service.mgmt.selected.battchg(it.substring(2, 4)) }
         ind["MF"] = { service.mgmt.autoconnect(it.substring(0, 1)); service.mgmt.autoanswer(it.substring(1, 2)) }
         ind["MI"] = { service.mgmt.selected.avrcpAttribute(it.split("\b")) }
+        ind["AL"] = { it.split(",").let { service.mgmt.selected.hfpStatus(it[0]); service.mgmt.selected.a2dpStatus(it[1])}
+        }
     }
 
     fun onBytes(data: ByteArray) {

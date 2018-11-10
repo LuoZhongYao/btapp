@@ -18,7 +18,8 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import kotlin.properties.Delegates
 
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), Search, Id {
+    override var id: Long = 0L
     private val data = ArrayList<Map<String, String>>()
     private val map = HashMap<String, String>()
     private var adapter: SimpleAdapter by Delegates.notNull()
@@ -35,7 +36,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
-        registerBroad()
         btn_search.setOnClickListener { data.clear(); service.Search();pb_search.visibility = View.VISIBLE }
         btn_cancel.setOnClickListener { service.CancelSearch(); pb_search.visibility = View.GONE }
         super.onViewCreated(view, savedInstanceState)
@@ -52,17 +52,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun registerBroad() {
-        val intentFilter = IntentFilter()
-        intentFilter.addAction("search")
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(object: BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                intent.getStringExtra("complete")?.let { pb_search?.visibility = View.GONE}
-                intent.getStringArrayExtra("result")?.let { add(it[1], it[0])}
-            }
-        },intentFilter)
-    }
-
     private fun add(name: String, bdaddr: String) {
         data.clear()
         map.put(bdaddr, name)
@@ -74,4 +63,7 @@ class SearchFragment : Fragment() {
         }
         adapter.notifyDataSetChanged()
     }
+
+    override fun onComplete() { pb_search?.visibility = View.GONE}
+    override fun onResult(name: String, bdaddr: String) = add(name, bdaddr)
 }

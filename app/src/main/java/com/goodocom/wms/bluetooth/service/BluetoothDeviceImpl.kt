@@ -13,8 +13,6 @@ class BluetoothDeviceImpl(val bdaddr: String,
                           val io: BluetoothService.IOService): BluetoothDevice {
 
     private val callback = RemoteCallbackList<IBluetoothDeviceCallback>()
-    private var profileMap: Int = 0
-        set(v) { (field != 0 && v == 0).True { mgmt.dmRemove(bdaddr) }; field = v }
     override  var signal = 0
         set(v) { field = v; notify { it.onSignal(v)} }
     fun signal(sig: String) { signal = sig.toInt() }
@@ -32,6 +30,13 @@ class BluetoothDeviceImpl(val bdaddr: String,
         set(v) { field = v; notify{ it.onName(v)}}
     override var number: String = "10086"
         set(v) { field = v; notify{ it.onNumber(v)}}
+
+    private var profileMap: Int = 0
+        set(v) {
+            (field != 0 && v == 0).True { mgmt.dmRemove(bdaddr) }
+            (field == 0 && v != 0).True { mgmt.dmAdd(bdaddr) }
+            field = v
+        }
 
 
     init {
@@ -106,6 +111,7 @@ class BluetoothDeviceImpl(val bdaddr: String,
     override fun Disconnect() = exec("CD")
     override fun SyncPhonebook() = exec("PB")
     override fun SyncHistory() = exec("PN")
+    override fun CancelSync() = exec("PS")
 
     private fun notify(cbk: (c: IBluetoothDeviceCallback) -> Unit) {
         for( i in 0 until callback.beginBroadcast()) {

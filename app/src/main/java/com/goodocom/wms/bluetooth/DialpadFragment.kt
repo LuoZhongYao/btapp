@@ -27,13 +27,19 @@ class DialpadFragment : Fragment(), Call {
             dev = (parentFragment as ProfileFragment).dev
         dev?.call = this
         initListener()
+        dev?.let {
+            onHfpStatus(it.hfpStatus)
+            onNumber(it.number)
+            onMicMuted(it.micMuted)
+            onAudio(it.audioDirection)
+        }
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun initListener() {
         arrayOf(btn_number0, btn_number1, btn_number2, btn_number3, btn_number4, btn_number5,
-            btn_number6,  btn_number7, btn_number8, btn_number9, btn_number10, btn_number11).forEach {
-            it.setOnClickListener {
+            btn_number6,  btn_number7, btn_number8, btn_number9, btn_number10, btn_number11).forEach { btn ->
+            btn.setOnClickListener {
                 val btn = it as AppCompatButton
                 if(dev?.hfpStatus == BluetoothDevice.HfpStatus.TALKING)
                     dev?.DTMF((btn.text.toString()))

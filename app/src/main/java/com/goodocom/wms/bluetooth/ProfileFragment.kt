@@ -15,7 +15,8 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlin.properties.Delegates
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), Id {
+    override var id: Long = 0L
     var dev: BluetoothDeviceImpl by Delegates.notNull()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +43,7 @@ class ProfileFragment : Fragment() {
             override fun getCount(): Int = tabItem.size
             //override fun getItemPosition(`object`: Any): Int = FragmentStatePagerAdapter.POSITION_NONE
         }
+        vp_profile.offscreenPageLimit = 4
         ib_dialpad.setOnClickListener { vp_profile.setCurrentItem(0, false)}
         ib_music.setOnClickListener { vp_profile.setCurrentItem(1, false)}
         ib_contact.setOnClickListener { vp_profile.setCurrentItem(2, false)}

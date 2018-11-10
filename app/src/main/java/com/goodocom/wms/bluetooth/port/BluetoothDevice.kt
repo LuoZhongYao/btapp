@@ -43,4 +43,5 @@ interface BluetoothDevice {
     fun Disconnect()
     fun SyncPhonebook()
     fun SyncHistory()
+    fun CancelSync()
 }

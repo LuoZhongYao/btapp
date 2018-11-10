@@ -16,7 +16,8 @@ import kotlinx.android.synthetic.main.fragment_devlist.*
 import kotlin.properties.Delegates
 
 
-class DevlistFragment : Fragment(), DeviceList {
+class DevlistFragment : Fragment(), DeviceList, Id {
+    override var id: Long = 0L
     private val pairList = ArrayList<Map<String, Any>>()
     private var pairAdapter: SimpleAdapter by Delegates.notNull()
     private val devAdapter = object: BaseAdapter() {

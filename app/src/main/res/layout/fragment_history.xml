@@ -45,10 +45,10 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="80dp"
                 android:paddingRight="80dp"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
             <RelativeLayout
-                    android:id="@+id/rl_downloading"
+                    android:id="@+id/history_downloading"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="visible" >
@@ -61,7 +61,7 @@
                         android:src="@drawable/ic_match_bg" />
 
                 <ImageView
-                        android:id="@+id/image_animation"
+                        android:id="@+id/history_animation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_above="@id/flag_center"
@@ -70,21 +70,12 @@
                         android:src="@drawable/ic_donwloading" />
             </RelativeLayout>
 
-            <android.support.v4.view.ViewPager
-                    android:id="@+id/vp_content"
+            <ListView
+                    android:id="@+id/vp_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone" >
-            </android.support.v4.view.ViewPager>
+            </ListView>
         </FrameLayout>
-
-        <TextView
-                android:id="@+id/tv_device_disconnect"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="请先连接设备"
-                android:textSize="23sp"
-                android:visibility="visible" />
     </LinearLayout>
 </LinearLayout>
