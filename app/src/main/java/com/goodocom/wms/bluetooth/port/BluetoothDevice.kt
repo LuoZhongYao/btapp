@@ -18,7 +18,12 @@ interface BluetoothDevice {
         CONNECTED,
         INCOMING,
         OUTGOING,
-        TALKING
+        TALKING,
+        TWC_INCOMING,
+        TWC_OUTGOING,
+        TWC_HELD_ACTIVE,
+        TWC_HELD_REMAINING,
+        TWC_MULTIPARTY
     }
 
     enum class A2dpStatus { DISCONNECTED, CONNECTED }
@@ -44,4 +49,5 @@ interface BluetoothDevice {
     fun SyncPhonebook()
     fun SyncHistory()
     fun CancelSync()
+    fun AudioSource()
 }

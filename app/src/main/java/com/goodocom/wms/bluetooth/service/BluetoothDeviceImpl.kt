@@ -112,6 +112,7 @@ class BluetoothDeviceImpl(val bdaddr: String,
     override fun SyncPhonebook() = exec("PB")
     override fun SyncHistory() = exec("PN")
     override fun CancelSync() = exec("PS")
+    override fun AudioSource() = exec("AS")
 
     private fun notify(cbk: (c: IBluetoothDeviceCallback) -> Unit) {
         for( i in 0 until callback.beginBroadcast()) {

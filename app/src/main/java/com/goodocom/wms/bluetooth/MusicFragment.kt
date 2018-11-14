@@ -88,6 +88,11 @@ class MusicFragment : Fragment(), Media {
         tv_music_posandtotal?.text = attr[3] + "/" + attr[4]
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        isVisibleToUser.True { dev?.AudioSource() }
+        super.setUserVisibleHint(isVisibleToUser)
+    }
+
     companion object {
         private const val TAG = "btapp"
     }

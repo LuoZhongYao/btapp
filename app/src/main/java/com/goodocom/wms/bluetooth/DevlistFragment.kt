@@ -3,7 +3,6 @@ package com.goodocom.wms.bluetooth
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,9 @@ import kotlinx.android.synthetic.main.fragment_devlist.*
 import kotlin.properties.Delegates
 
 
-class DevlistFragment : Fragment(), DeviceList, Id {
+class DevlistFragment : Fragment(), DeviceList, FragmentId {
     override var id: Long = 0L
+    override var position = 0
     private val pairList = ArrayList<Map<String, Any>>()
     private var pairAdapter: SimpleAdapter by Delegates.notNull()
     private val devAdapter = object: BaseAdapter() {

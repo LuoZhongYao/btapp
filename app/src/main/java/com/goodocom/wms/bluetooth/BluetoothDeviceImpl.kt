@@ -2,6 +2,7 @@ package com.goodocom.wms.bluetooth
 import android.content.Context
 import com.goodocom.wms.bluetooth.port.BluetoothDevice
 import com.goodocom.wms.bluetooth.service.BluetoothService
+import com.goodocom.wms.bluetooth.utils.True
 
 class BluetoothDeviceImpl(
     val context: Context,
@@ -13,6 +14,7 @@ class BluetoothDeviceImpl(
     var call: Call? = null
     var book: Phonebook? = null
     var history: History? = null
+    var profile: Profile? = null
     private var db = Database(context, "Contact$bdaddr")
 
     override var signal: Int
@@ -40,8 +42,12 @@ class BluetoothDeviceImpl(
         get() = service.DeviceNumber(bdaddr)
 
     override var hfpStatus: BluetoothDevice.HfpStatus
-        set(v) { call?.onHfpStatus(v)}
         get() = BluetoothDevice.HfpStatus.valueOf(service.DeviceHfpStatus(bdaddr))
+        set(v) {
+            call?.onHfpStatus(v)
+            history?.onHfpStatus(v)
+            (v > BluetoothDevice.HfpStatus.CONNECTED).True { profile?.active()}
+        }
 
     override var pbapStatus: BluetoothDevice.PbapStatus
         set(v) { book?.onPbapStatus(v) }
@@ -80,6 +86,7 @@ class BluetoothDeviceImpl(
     override fun SyncPhonebook() = service.DeviceSyncPhonebook(bdaddr)
     override fun SyncHistory() = service.DeviceSyncHistory(bdaddr)
     override fun CancelSync() = service.DeviceCancelSync(bdaddr)
+    override fun AudioSource() = service.DeviceAudioSource(bdaddr)
 
     override fun onAvrcpAttribute(attr: List<String>) { media?.onAvrcpAttribute(attr) }
 

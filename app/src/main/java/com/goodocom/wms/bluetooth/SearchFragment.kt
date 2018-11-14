@@ -1,13 +1,8 @@
 package com.goodocom.wms.bluetooth
 
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.LocalBroadcastManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +13,9 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import kotlin.properties.Delegates
 
 
-class SearchFragment : Fragment(), Search, Id {
+class SearchFragment : Fragment(), Search, FragmentId {
     override var id: Long = 0L
+    override var position = 0
     private val data = ArrayList<Map<String, String>>()
     private val map = HashMap<String, String>()
     private var adapter: SimpleAdapter by Delegates.notNull()

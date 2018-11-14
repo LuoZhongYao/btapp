@@ -11,8 +11,9 @@ import com.goodocom.wms.bluetooth.utils.False
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 
-class SettingsFragment : Fragment(), LocalSettings, Id {
+class SettingsFragment : Fragment(), LocalSettings, FragmentId {
     override var id: Long = 0L
+    override var position = 0
     private val service: BluetoothService.BluetoothServiceImpl
         get() = (activity as MainActivity).service
 

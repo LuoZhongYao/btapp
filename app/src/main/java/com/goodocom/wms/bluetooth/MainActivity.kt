@@ -10,7 +10,9 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.goodocom.wms.bluetooth.port.BluetoothDevice
 import com.goodocom.wms.bluetooth.service.BluetoothService
+import com.goodocom.wms.bluetooth.utils.True
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.properties.Delegates
 
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
     private fun updateFragment() {
         val ft = supportFragmentManager.beginTransaction()
-        (vp_main?.adapter as TabFragment).updateBaseId()
+        vp_main?.adapter?.let{(it as TabFragment).updateBaseId()}
         tabItem.retainAll(fixedTab)
         device.forEach { tabItem.add(0, it.value.tabItem)}
         supportFragmentManager.fragments.forEach { ft.remove(it) }
@@ -51,9 +53,8 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
         for (i in 0 until tabItem.size)
             tl_tablayout.getTabAt(i)?.setIcon(tabItem[i].image)
         vp_main?.currentItem = 0
-        tl_tablayout.getTabAt(0)?.let { it.select() }
+        tl_tablayout.getTabAt(0)?.select()
         callback.connectedDevices(device.values.toTypedArray())
-
     }
 
     fun dmAdd(bdaddr: String) {
@@ -106,8 +107,9 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     inner class TabFragment: FragmentStatePagerAdapter(supportFragmentManager) {
         private var id = 0L
         override fun getItem(pos :Int): Fragment {
-            val fm = tabItem[pos].clazz.newInstance() as Id
+            val fm = tabItem[pos].clazz.newInstance() as FragmentId
             fm.id = id
+            fm.position = pos
             when(fm) {
                 is DevlistFragment -> { callback.devs = fm; fm.onConnectedDevice(device.values.toTypedArray())}
                 is SettingsFragment -> callback.settings = fm
@@ -120,7 +122,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
         override fun getCount(): Int = tabItem.size
         override fun getPageTitle(position: Int): CharSequence? = tabItem[position].getTitle()
         override fun getItemPosition(`object`: Any): Int {
-            return if((`object` as Id).id == id) POSITION_UNCHANGED else POSITION_NONE
+            return if((`object` as FragmentId).id == id) POSITION_UNCHANGED else POSITION_NONE
         }
     }
 

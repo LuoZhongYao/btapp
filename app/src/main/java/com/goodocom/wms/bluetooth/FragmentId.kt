@@ -1,5 +1,6 @@
 package com.goodocom.wms.bluetooth
 
-interface Id {
+interface FragmentId {
     var id: Long
+    var position: Int
 }

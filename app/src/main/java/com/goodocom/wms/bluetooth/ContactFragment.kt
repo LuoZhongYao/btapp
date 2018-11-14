@@ -56,6 +56,12 @@ class ContactFragment : Fragment(), Phonebook {
         lv_content.adapter = SimpleCursorAdapter(context!!,  R.layout.contact_item, null,
             arrayOf("name", "number"), intArrayOf(R.id.tv_name, R.id.tv_number),
             CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+        lv_content.setOnItemClickListener { parent, _, position, _ ->
+            parent.getItemAtPosition(position)?.let { m ->
+                val map: HashMap<String, String> = m as HashMap<String, String>
+                map["number"]?.let { dev?.Dial(it)}
+            }
+        }
     }
 
     override fun onPbapStatus(status: BluetoothDevice.PbapStatus) {

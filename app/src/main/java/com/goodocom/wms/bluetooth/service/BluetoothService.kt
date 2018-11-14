@@ -278,5 +278,6 @@ class BluetoothService : Service() {
         override fun DeviceSyncHistory(bdaddr: String) = mgmt.device[bdaddr]!!.SyncHistory()
         override fun DeviceSyncPhonebook(bdaddr: String) = mgmt.device[bdaddr]!!.SyncPhonebook()
         override fun DeviceCancelSync(bdaddr: String) = mgmt.device[bdaddr]!!.CancelSync()
+        override fun DeviceAudioSource(bdaddr: String) = mgmt.device[bdaddr]!!.AudioSource()
     }
 }
