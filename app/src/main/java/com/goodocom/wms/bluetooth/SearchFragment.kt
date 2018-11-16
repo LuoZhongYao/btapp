@@ -32,7 +32,7 @@ class SearchFragment : Fragment(), Search, FragmentId {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
-        btn_search.setOnClickListener { data.clear(); service.Search();pb_search.visibility = View.VISIBLE }
+        btn_search.setOnClickListener { map.clear(); service.Search();pb_search.visibility = View.VISIBLE }
         btn_cancel.setOnClickListener { service.CancelSearch(); pb_search.visibility = View.GONE }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -41,16 +41,12 @@ class SearchFragment : Fragment(), Search, FragmentId {
         adapter = SimpleAdapter(context!!, data, R.layout.device_item,
             arrayOf("bdaddr", "name"), intArrayOf(R.id.tv_bdaddr, R.id.tv_name))
         lv_search.adapter = adapter
-        lv_search.onItemClickListener = object: AdapterView.OnItemClickListener {
-            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                data[position]["bdaddr"]?.let { service.Connect(it)}
-            }
-        }
+        lv_search.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> data[position]["bdaddr"]?.let { service.Connect(it)} }
     }
 
     private fun add(name: String, bdaddr: String) {
         data.clear()
-        map.put(bdaddr, name)
+        map[bdaddr] = name
         map.forEach {
             val m = HashMap<String, String>()
             m["bdaddr"] = it.key
