@@ -89,7 +89,7 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
     }
 
     override fun onPairDevice(index: Int, bdaddr: String, name: String) {
-        add(index, bdaddr, name)
+        add(index, name, bdaddr)
     }
 
     override fun onConnectedDevice(dev: Array<BluetoothDeviceImpl>) {

@@ -41,12 +41,17 @@ class BluetoothDeviceImpl(
         set(v) { call?.onNumber(v)}
         get() = service.DeviceNumber(bdaddr)
 
-    override var hfpStatus: BluetoothDevice.HfpStatus
+    override var hfpStatus: BluetoothDevice.HfpStatus =BluetoothDevice.HfpStatus.DISCONNECTED
         get() = BluetoothDevice.HfpStatus.valueOf(service.DeviceHfpStatus(bdaddr))
         set(v) {
             call?.onHfpStatus(v)
             history?.onHfpStatus(v)
             (v > BluetoothDevice.HfpStatus.CONNECTED).True { profile?.active()}
+            (v == BluetoothDevice.HfpStatus.CONNECTED
+                    && field > BluetoothDevice.HfpStatus.CONNECTED).True {
+                profile?.inactive()
+            }
+            field = v
         }
 
     override var pbapStatus: BluetoothDevice.PbapStatus
@@ -83,10 +88,13 @@ class BluetoothDeviceImpl(
     override fun MicToggle() = service.DeviceMicToggle(bdaddr)
     override fun VoiceToggle() = service.DeviceVoiceToggle(bdaddr)
     override fun Disconnect() = service.DeviceDisconnect(bdaddr)
-    override fun SyncPhonebook() = service.DeviceSyncPhonebook(bdaddr)
     override fun SyncHistory() = service.DeviceSyncHistory(bdaddr)
     override fun CancelSync() = service.DeviceCancelSync(bdaddr)
     override fun AudioSource() = service.DeviceAudioSource(bdaddr)
+    override fun SyncPhonebook() {
+        db.clear()
+        service.DeviceSyncPhonebook(bdaddr)
+    }
 
     override fun onAvrcpAttribute(attr: List<String>) { media?.onAvrcpAttribute(attr) }
 

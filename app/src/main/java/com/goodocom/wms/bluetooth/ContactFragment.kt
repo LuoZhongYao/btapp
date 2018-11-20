@@ -12,6 +12,7 @@ import android.view.animation.TranslateAnimation
 import android.widget.CursorAdapter
 import android.widget.SimpleCursorAdapter
 import com.goodocom.wms.bluetooth.port.BluetoothDevice
+import com.goodocom.wms.bluetooth.utils.True
 import kotlinx.android.synthetic.main.fragment_contact.*
 
 
@@ -42,7 +43,8 @@ class ContactFragment : Fragment(), Phonebook {
             btn_cancel.visibility = View.VISIBLE
             val animation = TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
-                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0.8f)
+                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0.8f
+            )
             animation.duration = 1000
             animation.fillAfter = false
             animation.repeatCount = -1
@@ -53,26 +55,37 @@ class ContactFragment : Fragment(), Phonebook {
         btn_cancel.setOnClickListener {
             dev?.CancelSync()
         }
-        lv_content.adapter = SimpleCursorAdapter(context!!,  R.layout.contact_item, null,
+        lv_content.adapter = SimpleCursorAdapter(
+            context!!, R.layout.contact_item, null,
             arrayOf("name", "number"), intArrayOf(R.id.tv_name, R.id.tv_number),
-            CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+            CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
+        )
         lv_content.setOnItemClickListener { parent, _, position, _ ->
             parent.getItemAtPosition(position)?.let { m ->
-                val map: HashMap<String, String> = m as HashMap<String, String>
-                map["number"]?.let { dev?.Dial(it)}
+                (m as Cursor).let { cur ->
+                    cur.getColumnIndex("number")?.let { index ->
+                        cur.getString(index)?.let { number ->
+                            dev?.Dial(number)
+                        }
+                    }
+                }
             }
         }
     }
 
-    override fun onPbapStatus(status: BluetoothDevice.PbapStatus) {
-
-    }
-
-    override fun onPhonebookComplete(cursor: Cursor?) {
+    private fun complete() {
         rl_downloading?.visibility = View.GONE
         btn_cancel?.visibility = View.GONE
         btn_sync?.visibility = View.VISIBLE
         lv_content?.visibility = View.VISIBLE
-        cursor?.let {(lv_content?.adapter as SimpleCursorAdapter).changeCursor(it)}
+    }
+
+    override fun onPbapStatus(status: BluetoothDevice.PbapStatus) {
+        (status == BluetoothDevice.PbapStatus.UNSUPPORTED).True {complete()}
+    }
+
+    override fun onPhonebookComplete(cursor: Cursor?) {
+        complete()
+        cursor?.let {(lv_content?.adapter as SimpleCursorAdapter?)?.changeCursor(it)}
     }
 }

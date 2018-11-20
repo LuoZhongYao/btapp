@@ -75,6 +75,10 @@ class BluetoothDeviceImpl(val bdaddr: String,
         set(v) {
             field = v; notify{ it.onAvrcpStatus(v.name) }
         }
+    fun avrcpStatus(status: String) {
+        avrcpStatus = BluetoothDevice.AvrcpStatus.values()[status.toInt()]
+    }
+
     override var avrcpPlaybackPos: Long = 0L
         set(v) {
             field = v; notify{ it.onAvrcpPlaybackPos(v) }

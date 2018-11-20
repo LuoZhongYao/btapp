@@ -20,6 +20,9 @@ class ProfileFragment : Fragment(), FragmentId, Profile {
     var dev: BluetoothDeviceImpl by Delegates.notNull()
     var parent: ViewPager by Delegates.notNull()
 
+    private var old_pos: Int = 0
+    private var old_item: Int = 0
+
     private val tabItem = arrayOf(
         DialpadFragment::class.java,
         MusicFragment::class.java,
@@ -53,21 +56,36 @@ class ProfileFragment : Fragment(), FragmentId, Profile {
     }
 
     override fun active() {
-        parent.currentItem = position
-        vp_profile.setCurrentItem(0, false)
+        (parent.currentItem != position).True {
+            old_pos = parent.currentItem
+            parent.currentItem = position
+        }
+        vp_profile?.let {
+            (it.currentItem != 0).True {
+                old_item = it.currentItem
+                it.setCurrentItem(0, false)
+            }
+        }
+    }
+
+    override fun inactive() {
+        Log.i("btapp", "old_pos $old_pos, old_item $old_item")
+        parent.currentItem = old_pos
+        vp_profile?.setCurrentItem(old_item, false)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        vp_profile?.adapter?.let { (it as ProfilePagerAdapter).currentFragment?.userVisibleHint = isVisibleToUser}
+        vp_profile?.adapter?.let { (it as ProfilePagerAdapter).currentFragment?.userVisibleHint = isVisibleToUser }
         super.setUserVisibleHint(isVisibleToUser)
     }
 
-    inner  class ProfilePagerAdapter : FragmentPagerAdapter(childFragmentManager) {
+    inner class ProfilePagerAdapter : FragmentPagerAdapter(childFragmentManager) {
         var currentFragment: Fragment? = null
         override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
             currentFragment = `object` as Fragment
             super.setPrimaryItem(container, position, `object`)
         }
+
         override fun getItem(pos: Int): Fragment = tabItem[pos].newInstance() as Fragment
         override fun getCount(): Int = tabItem.size
         //override fun getItemPosition(`object`: Any): Int = FragmentStatePagerAdapter.POSITION_NONE

@@ -190,6 +190,7 @@ class BluetoothService : Service() {
             } finally {
                 input?.close()
                 output?.close()
+                output = null
             }
         }
 

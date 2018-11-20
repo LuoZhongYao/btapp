@@ -42,8 +42,18 @@ class MusicFragment : Fragment(), Media {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun initView() {
+    private fun updateStatus(status: BluetoothDevice.AvrcpStatus) {
+        if(status == BluetoothDevice.AvrcpStatus.PLAY) {
+            iv_play?.visibility = View.GONE
+            iv_pause?.visibility = View.VISIBLE
+        } else {
+            iv_play?.visibility = View.VISIBLE
+            iv_pause?.visibility = View.GONE
+        }
+    }
 
+    private fun initView() {
+        dev?.let { updateStatus(it.avrcpStatus) }
     }
 
     private fun initListener() {
@@ -61,13 +71,7 @@ class MusicFragment : Fragment(), Media {
     }
 
     override fun onAvrcpStatus(status: BluetoothDevice.AvrcpStatus) {
-        if(status == BluetoothDevice.AvrcpStatus.PLAY) {
-            iv_play?.visibility = View.GONE
-            iv_pause?.visibility = View.VISIBLE
-        } else {
-            iv_play?.visibility = View.VISIBLE
-            iv_pause?.visibility = View.GONE
-        }
+        updateStatus(status)
     }
 
     @SuppressLint("SimpleDateFormat")
