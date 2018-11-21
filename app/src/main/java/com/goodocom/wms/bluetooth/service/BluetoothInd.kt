@@ -62,7 +62,7 @@ class BluetoothInd(val ser: BluetoothService) {
         ind["Mf"] = { ser.mgmt.selected.browsingFolder(it) }
         ind["Mm"] = { ser.mgmt.selected.browsingMedia(it) }
         ind["MF"] = { ser.mgmt.autoconnect(it.substring(0, 1)); ser.mgmt.autoanswer(it.substring(1, 2)) }
-        ind["MI"] = { ser.mgmt.selected.avrcpAttribute(it.split("\b")) }
+        ind["MI"] = { ser.mgmt.selected.avrcpAttribute = it.split("\b") }
         ind["PS"] = { ser.mgmt.selected.signal(it.substring(0, 2)); ser.mgmt.selected.battchg(it.substring(2, 4)) }
         ind["AL"] = {
             it.split(",").let {

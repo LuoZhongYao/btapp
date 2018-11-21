@@ -64,7 +64,10 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
             device.clear()
             updateFragment()
         } else if (device[bdaddr] == null) {
-            val dev = BluetoothDeviceImpl(this.applicationContext, bdaddr, service) { vp_main.adapter?.notifyDataSetChanged() }
+            val dev = BluetoothDeviceImpl(this.applicationContext, bdaddr, service) {
+                callback.connectedDevices(device.values.toTypedArray())
+                vp_main.adapter?.notifyDataSetChanged()
+            }
             service.devRegister(bdaddr, dev)
             device[bdaddr] = dev
             updateFragment()

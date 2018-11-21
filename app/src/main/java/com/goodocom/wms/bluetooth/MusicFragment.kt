@@ -53,7 +53,10 @@ class MusicFragment : Fragment(), Media {
     }
 
     private fun initView() {
-        dev?.let { updateStatus(it.avrcpStatus) }
+        dev?.let {
+            updateStatus(it.avrcpStatus)
+            onAvrcpAttribute(it.avrcpAttribute)
+        }
     }
 
     private fun initListener() {

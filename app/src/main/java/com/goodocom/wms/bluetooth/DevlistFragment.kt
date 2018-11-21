@@ -6,20 +6,50 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.BaseAdapter
-import android.widget.SimpleAdapter
-import android.widget.TextView
+import android.widget.*
 import com.goodocom.wms.bluetooth.service.BluetoothService
+import com.goodocom.wms.bluetooth.utils.True
 import kotlinx.android.synthetic.main.fragment_devlist.*
+import kotlinx.android.synthetic.main.pair_item.*
 import kotlin.properties.Delegates
 
 
 class DevlistFragment : Fragment(), DeviceList, FragmentId {
     override var id: Long = 0L
     override var position = 0
-    private val pairList = ArrayList<Map<String, Any>>()
-    private var pairAdapter: SimpleAdapter by Delegates.notNull()
+
+    private var pairAdapter = object: BaseAdapter() {
+        val data = ArrayList<Map<String, String>>()
+        override fun getCount(): Int = data.size
+        override fun getItem(position: Int): Any = data[position]
+        override fun getItemId(position: Int): Long = position.toLong()
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            class ViewHolder(val name: TextView, val bdaddr: TextView, val delete: ImageView)
+            val view: View
+            val holder: ViewHolder
+            if (convertView == null) {
+                view = LayoutInflater.from(context!!).inflate(R.layout.pair_item, parent, false)
+                holder = ViewHolder(view.findViewById(R.id.tv_name),
+                    view.findViewById(R.id.tv_bdaddr),
+                    view.findViewById(R.id.iv_delete))
+                view.tag = holder
+            } else {
+                holder = convertView.tag as ViewHolder
+                view = convertView
+            }
+            holder.name.text = data[position]["name"]
+            holder.bdaddr.text = data[position]["bdaddr"]
+            holder.delete.tag = position
+            holder.delete.setOnClickListener {
+                data[it.tag as Int]["bdaddr"]?.let {
+                    service.Delete(it)
+                    service.ReadPairList()
+                }
+            }
+
+            return view
+        }
+    }
     private val devAdapter = object: BaseAdapter() {
         val data = ArrayList<BluetoothDeviceImpl>()
         override fun getCount(): Int = data.size
@@ -57,18 +87,16 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        pairList.clear()
+        pairAdapter.data.clear()
         initView()
         service.ReadPairList()
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun initView() {
-        pairAdapter = SimpleAdapter(context!!, pairList, R.layout.device_item,
-            arrayOf("bdaddr", "name"), intArrayOf(R.id.tv_bdaddr, R.id.tv_name))
         lv_pairlist.adapter = pairAdapter
         lv_pairlist.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            pairList[position]["bdaddr"]?.let { service.Connect(it as String)}
+            pairAdapter.data[position]["bdaddr"]?.let { service.Connect(it)}
         }
 
         lv_devlist.adapter = devAdapter
@@ -78,13 +106,14 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
     }
 
     private fun add(index: Int, name: String, bdaddr: String) {
-        val map = HashMap<String, Any>()
+        var insert: Boolean = true
+        val map = HashMap<String, String>()
         map["bdaddr"] = bdaddr
         map["name"] = name
-        map["index"] = index
         if(index == 1)
-            pairList.clear()
-        pairList.add(map)
+            pairAdapter.data.clear()
+        devAdapter.data.forEach { (it.bdaddr == bdaddr).True { insert = false } }
+        insert.True {  pairAdapter.data.add(map) }
         pairAdapter.notifyDataSetChanged()
     }
 

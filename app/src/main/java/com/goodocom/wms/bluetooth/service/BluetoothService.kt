@@ -218,6 +218,7 @@ class BluetoothService : Service() {
         fun requestEnableAutoAnswer() = write("MP")
         fun requestDisableAutoAnswer() = write("MQ")
         fun requestConnect(bdaddr: String) = write("CC$bdaddr")
+        fun requestDelete(bdaddr: String) = write("CV$bdaddr")
     }
 
     inner class BluetoothServiceImpl: IBluetoothService.Stub() {
@@ -242,6 +243,7 @@ class BluetoothService : Service() {
         override fun LocalAddress(): String = mgmt.bdaddr
         override fun Version(): String = mgmt.version
         override fun ReadPairList() = io.requestPairList()
+        override fun Delete(bdaddr: String) = io.requestDelete(bdaddr)
         override fun IsAutoConnecte() = mgmt.autoconnect
         override fun IsAutoAnswer() = mgmt.autoanswer
         override fun EnableAutoConnect() = io.requestEnableAutoConnect()
@@ -261,6 +263,7 @@ class BluetoothService : Service() {
         override fun DeviceA2dpStatus(bdaddr: String): String = mgmt.device[bdaddr]!!.a2dpStatus.name
         override fun DeviceAvrcpStatus(bdaddr: String): String = mgmt.device[bdaddr]!!.avrcpStatus.name
         override fun DeviceAvrcpPlaybackPos(bdaddr: String): Long = mgmt.device[bdaddr]!!.avrcpPlaybackPos
+        override fun DeviceAvrcpAttribute(bdaddr: String): List<String> = mgmt.device[bdaddr]!!.avrcpAttribute
 
         override fun DeviceDTMF(bdaddr: String, dtfm: String) = mgmt.device[bdaddr]!!.DTMF(dtfm)
         override fun DeviceDial(bdaddr: String, number: String) = mgmt.device[bdaddr]!!.Dial(number)

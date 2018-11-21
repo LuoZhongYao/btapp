@@ -84,7 +84,11 @@ class BluetoothDeviceImpl(val bdaddr: String,
             field = v; notify{ it.onAvrcpPlaybackPos(v) }
         }
 
-    fun avrcpAttribute(attr: List<String>) = notify{ it.onAvrcpAttribute(attr)}
+    override var avrcpAttribute: List<String> = listOf("", "", "", "", "")
+        set(v) {
+            field = v; notify { it.onAvrcpAttribute(v) }
+        }
+
     fun phonebookItem(item: List<String>) = notify { it.onPhonebookItem(item[0], item[1]) }
     fun historyItem(type: String, item: List<String>) = notify { it.onHistoryItem(type, item[0], item[1], item[2]) }
     fun phonebookComplete() = notify { it.onPhonebookComplete()  }

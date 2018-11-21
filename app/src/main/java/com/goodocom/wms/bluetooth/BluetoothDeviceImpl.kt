@@ -34,7 +34,7 @@ class BluetoothDeviceImpl(
         get() = BluetoothDevice.AudioDirection.valueOf(service.DeviceAudioDirection(bdaddr))
 
     override var name: String
-        set(v) { rename() }
+        set(_) { rename() }
         get() = service.DeviceName(bdaddr)
 
     override var number: String
@@ -70,6 +70,10 @@ class BluetoothDeviceImpl(
         set(v) { media?.onAvrcpPlaybackPos(v) }
         get() = service.DeviceAvrcpPlaybackPos(bdaddr)
 
+    override var avrcpAttribute: List<String>
+        get() = service.DeviceAvrcpAttribute(bdaddr)
+        set(value) { media?.onAvrcpAttribute(value)}
+
     val tabItem: MainActivity.TabItem = object: MainActivity.TabItem(R.drawable.ic_smartphone, ProfileFragment::class.java, name, this) {
         override fun getTitle(): String = name
     }
@@ -96,7 +100,9 @@ class BluetoothDeviceImpl(
         service.DeviceSyncPhonebook(bdaddr)
     }
 
-    override fun onAvrcpAttribute(attr: List<String>) { media?.onAvrcpAttribute(attr) }
+    override fun onAvrcpAttribute(attr: List<String>) {
+        avrcpAttribute = attr
+    }
 
     override fun onA2dpStatus(status: String) {
         a2dpStatus = BluetoothDevice.A2dpStatus.valueOf(status)

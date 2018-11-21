@@ -11,6 +11,7 @@ interface BluetoothDevice {
     var a2dpStatus: A2dpStatus
     var avrcpStatus: AvrcpStatus
     var avrcpPlaybackPos: Long
+    var avrcpAttribute: List<String>
 
     enum class HfpStatus{
         DISCONNECTED,

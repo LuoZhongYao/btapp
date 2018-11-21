@@ -63,7 +63,7 @@ class ContactFragment : Fragment(), Phonebook {
         lv_content.setOnItemClickListener { parent, _, position, _ ->
             parent.getItemAtPosition(position)?.let { m ->
                 (m as Cursor).let { cur ->
-                    cur.getColumnIndex("number")?.let { index ->
+                    cur.getColumnIndex("number").let { index ->
                         cur.getString(index)?.let { number ->
                             dev?.Dial(number)
                         }

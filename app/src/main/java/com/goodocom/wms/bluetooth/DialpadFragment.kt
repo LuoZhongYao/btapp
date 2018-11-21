@@ -57,6 +57,7 @@ class DialpadFragment : Fragment(), Call {
             when(dev?.hfpStatus) {
                 BluetoothDevice.HfpStatus.CONNECTED -> dev?.Dial(tv_display.text.toString())
                 BluetoothDevice.HfpStatus.INCOMING -> dev?.Answer()
+                else -> {}
             }
         }
         iv_hangup.setOnClickListener { dev?.Hangup() }

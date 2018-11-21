@@ -10,6 +10,7 @@ interface IBluetoothService {
     void unregister(IBluetoothCallback callback);
 
     void ReadPairList();
+    void Delete(String bdaddr);
 	String LocalName();
 	void SetLocalName(String name);
 	String PinCode();
@@ -37,6 +38,7 @@ interface IBluetoothService {
     String DeviceA2dpStatus(String bdaddr);
     String DeviceAvrcpStatus(String bdaddr);
     long DeviceAvrcpPlaybackPos(String bdaddr);
+    List<String> DeviceAvrcpAttribute(String bdaddr);
 
     void DeviceDTMF(String bdaddr,String dtfm);
     void DeviceDial(String bdaddr,String number);
