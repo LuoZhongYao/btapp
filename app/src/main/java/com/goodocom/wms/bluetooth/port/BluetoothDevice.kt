@@ -6,7 +6,11 @@ interface BluetoothDevice {
     var pbapStatus: PbapStatus
     var audioDirection: AudioDirection
     var name: String
-    var number: String
+    var talkingNumber: String
+    var incomingNumber: String
+    var outgoingNumber: String
+    var twcWaitNumber: String
+    var twcHeldNumber: String
     var hfpStatus: HfpStatus
     var a2dpStatus: A2dpStatus
     var avrcpStatus: AvrcpStatus
@@ -32,6 +36,10 @@ interface BluetoothDevice {
     enum class AudioDirection{ BLUETOOTH, PHONE}
     enum class PbapStatus { UNSUPPORTED, SUPPORT}
 
+    fun TwcReleaseHeldRejectWait()
+    fun TwcReleaseActiveAnswerOther()
+    fun TwcHoldActiveAcceptOther()
+    fun TwcConference()
     fun DTMF(dtmf: String)
     fun Dial(number: String)
     fun AudioToggle()

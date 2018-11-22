@@ -19,18 +19,20 @@ class BluetoothInd(val ser: BluetoothService) {
         ind["IA"] = { ser.mgmt.selected.hfpStatus = HfpStatus.DISCONNECTED }
         ind["IB"] = { ser.mgmt.selected.hfpStatus = HfpStatus.CONNECTED }
         ind["IV"] = { ser.mgmt.selected.hfpStatus = HfpStatus.CONNECTING }
-        ind["id"] = { ser.mgmt.selected.hfpStatus = HfpStatus.INCOMING }
+        ind["Id"] = { ser.mgmt.selected.hfpStatus = HfpStatus.INCOMING }
         ind["IG"] = { ser.mgmt.selected.hfpStatus = HfpStatus.TALKING }
         ind["IF"] = { ser.mgmt.selected.hfpStatus = HfpStatus.CONNECTED }
-        ind["IL"] = {}
-        ind["IM"] = {}
-        ind["IN"] = {}
-        ind["IK"] = {}
-        ind["ID"] = { ser.mgmt.selected.number = it; ser.mgmt.selected.hfpStatus = HfpStatus.INCOMING }
-        ind["IC"] = { ser.mgmt.selected.number = it; ser.mgmt.selected.hfpStatus = HfpStatus.OUTGOING }
-        ind["IR"] = { ser.mgmt.selected.number = it; ser.mgmt.selected.hfpStatus = HfpStatus.TALKING }
-        ind["IE"] = { ser.mgmt.selected.number = it }
-        ind["IH"] = { ser.mgmt.selected.number = it }
+        ind["IL"] = { }
+        ind["Iw"] = { ser.mgmt.selected.hfpStatus = HfpStatus.TWC_INCOMING }
+        ind["Io"] = { ser.mgmt.selected.hfpStatus = HfpStatus.TWC_OUTGOING }
+        ind["IM"] = { ser.mgmt.selected.hfpStatus = HfpStatus.TWC_MULTIPARTY }
+        ind["IN"] = { ser.mgmt.selected.hfpStatus = HfpStatus.TWC_HELD_REMAINING }
+        ind["IK"] = { ser.mgmt.selected.hfpStatus = HfpStatus.TWC_HELD_ACTIVE }
+        ind["ID"] = { ser.mgmt.selected.incomingNumber = it; ser.mgmt.selected.hfpStatus = HfpStatus.INCOMING }
+        ind["IC"] = { ser.mgmt.selected.outgoingNumber = it; ser.mgmt.selected.hfpStatus = HfpStatus.OUTGOING }
+        ind["IR"] = { ser.mgmt.selected.talkingNumber = it; }
+        ind["IE"] = { ser.mgmt.selected.twcWaitNumber = it; }
+        ind["IH"] = { ser.mgmt.selected.twcHeldNumber = it; }
         ind["IO"] = { ser.mgmt.selected.micMuted = it.toInt() == 1 }
         ind["MC"] = { ser.mgmt.selected.audioDirection = AudioDirection.BLUETOOTH }
         ind["MD"] = { ser.mgmt.selected.audioDirection = AudioDirection.PHONE }

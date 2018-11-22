@@ -17,6 +17,8 @@ class BluetoothDeviceImpl(
     var profile: Profile? = null
     private var db = Database(context, "Contact$bdaddr")
 
+    fun query(number: String): String? = db.query(number)
+
     override var signal: Int
         set(v) { call?.onSignal(v) }
         get() = service.DeviceSignal(bdaddr)
@@ -37,9 +39,21 @@ class BluetoothDeviceImpl(
         set(_) { rename() }
         get() = service.DeviceName(bdaddr)
 
-    override var number: String
-        set(v) { call?.onNumber(v)}
-        get() = service.DeviceNumber(bdaddr)
+    override var talkingNumber: String
+        set(_) { call?.onHfpStatus(hfpStatus)}
+        get() = service.DeviceTalkingNumber(bdaddr)
+    override var incomingNumber: String
+        get() = service.DeviceIncomingNumber(bdaddr)
+        set(_) { call?.onHfpStatus(hfpStatus)}
+    override var outgoingNumber: String
+        get() = service.DeviceOutgoingNumber(bdaddr)
+        set(_) { call?.onHfpStatus(hfpStatus)}
+    override var twcWaitNumber: String
+        get() = service.DeviceTwcWaitNumber(bdaddr)
+        set(_) { call?.onHfpStatus(hfpStatus)}
+    override var twcHeldNumber: String
+        get() = service.DeviceTwcHeldNumber(bdaddr)
+        set(_) { call?.onHfpStatus(hfpStatus)}
 
     override var hfpStatus: BluetoothDevice.HfpStatus =BluetoothDevice.HfpStatus.DISCONNECTED
         get() = BluetoothDevice.HfpStatus.valueOf(service.DeviceHfpStatus(bdaddr))
@@ -77,6 +91,11 @@ class BluetoothDeviceImpl(
     val tabItem: MainActivity.TabItem = object: MainActivity.TabItem(R.drawable.ic_smartphone, ProfileFragment::class.java, name, this) {
         override fun getTitle(): String = name
     }
+
+    override fun TwcReleaseHeldRejectWait() = service.DeviceTwcReleaseHeldRejectWaiting(bdaddr)
+    override fun TwcReleaseActiveAnswerOther() = service.DeviceTwcReleaseActiveAnswerOther(bdaddr)
+    override fun TwcHoldActiveAcceptOther() = service.DeviceTwcHoldActiveAnswertOther(bdaddr)
+    override fun TwcConference() = service.DeviceTwcConference(bdaddr)
 
     override fun DTMF(dtmf: String) = service.DeviceDTMF(bdaddr, dtmf)
     override fun Dial(number: String) = service.DeviceDial(bdaddr, number)
@@ -144,8 +163,24 @@ class BluetoothDeviceImpl(
         micMuted = mute
     }
 
-    override fun onNumber(number: String) {
-       this.number = number
+    override fun onTalkingNumber(number: String) {
+       this.talkingNumber = number
+    }
+
+    override fun onIncomingNumber(number: String) {
+        this.incomingNumber = number
+    }
+
+    override fun onOutgoingNumber(number: String) {
+        this.outgoingNumber = number
+    }
+
+    override fun onTwcHeldNumber(number: String) {
+        this.twcHeldNumber = number
+    }
+
+    override fun onTwcWaitNumber(number: String) {
+        this.twcWaitNumber = number
     }
 
     override fun onHistoryItem(type: String, name: String, number: String, date: String) {

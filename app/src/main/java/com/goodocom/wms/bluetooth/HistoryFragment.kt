@@ -24,7 +24,6 @@ class HistoryFragment : Fragment(), History {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        dev?.let { (it.hfpStatus == HfpStatus.CONNECTED).True { syncHistory() } }
         return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
@@ -33,6 +32,7 @@ class HistoryFragment : Fragment(), History {
             dev = (parentFragment as ProfileFragment).dev
         dev?.history = this
         initView()
+        dev?.let { onHfpStatus(dev!!.hfpStatus) }
         super.onViewCreated(view, savedInstanceState)
     }
 

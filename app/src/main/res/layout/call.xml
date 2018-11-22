@@ -6,20 +6,21 @@
                 android:id="@+id/rl_call"
                 android:visibility="gone">
 
-    <FrameLayout
+    <LinearLayout
             android:id="@+id/fl_callinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_alignParentTop="true">
 
         <RelativeLayout
-                android:id="@+id/rl_call_page"
+                android:id="@+id/rl_primary_call"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible">
 
             <TextView
-                    android:id="@+id/tv_callstatus"
+                    android:id="@+id/tv_primary_call_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -28,18 +29,18 @@
             <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_callstatus"
+                    android:layout_below="@id/tv_primary_call_status"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
             >
                 <TextView
-                        android:id="@+id/tv_call_name"
+                        android:id="@+id/tv_primary_call_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="23sp"/>
                 <TextView
-                        android:id="@+id/tv_call_number"
+                        android:id="@+id/tv_primary_call_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="23sp"/>
@@ -47,56 +48,39 @@
         </RelativeLayout>
 
         <RelativeLayout
-                android:id="@+id/rl_talking_page"
+                android:id="@+id/rl_secondary_call"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone">
 
-            <LinearLayout
-                    android:id="@+id/ll_statusandtime"
+            <TextView
+                    android:id="@+id/tv_secondary_call_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:orientation="horizontal">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/talking"
-                        android:textSize="20sp"/>
-
-                <Chronometer
-                        android:id="@+id/chronometer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:textSize="20sp"/>
-            </LinearLayout>
-
+                    android:text="@string/incoming"
+                    android:textSize="20sp"/>
             <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/ll_statusandtime"
+                    android:layout_below="@id/tv_secondary_call_status"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_horizontal">
+                    android:orientation="vertical"
+            >
                 <TextView
-                        android:id="@+id/tv_connection_name"
+                        android:id="@+id/tv_secondary_call_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textIsSelectable="true"
-                        android:textSize="23sp"
-                        android:layout_marginRight="10dp"/>
+                        android:textSize="23sp"/>
                 <TextView
-                        android:id="@+id/tv_connection_number"
+                        android:id="@+id/tv_secondary_call_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textIsSelectable="true"
                         android:textSize="23sp"/>
             </LinearLayout>
         </RelativeLayout>
-    </FrameLayout>
+    </LinearLayout>
 
     <LinearLayout
             android:id="@+id/ll_action"
@@ -111,21 +95,52 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_hangup"/>
+                android:src="@drawable/ic_hangup"
+                android:background="@drawable/normal_button"/>
+
+        <ImageView
+                android:id="@+id/iv_addcall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_add"
+                android:visibility="gone"
+                android:background="@drawable/normal_button"/>
+
+        <ImageView
+                android:id="@+id/iv_conference"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_conference"
+                android:visibility="gone"
+                android:background="@drawable/normal_button"/>
+
+        <ImageView
+                android:id="@+id/iv_swap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_swap"
+                android:visibility="gone"
+                android:background="@drawable/normal_button"/>
+
 
         <ImageView
                 android:id="@+id/iv_audio_route"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_phone_bluetooth_speaker"/>
+                android:src="@drawable/ic_phone_bluetooth_speaker"
+                android:background="@drawable/normal_button"/>
 
         <ImageView
                 android:id="@+id/iv_mic_off"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_mic"/>
+                android:src="@drawable/ic_mic"
+                android:background="@drawable/normal_button"/>
     </LinearLayout>
 
 

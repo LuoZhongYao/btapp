@@ -14,7 +14,11 @@ interface IBluetoothDeviceCallback {
     void onAvrcpPlaybackPos(long pos);
     void onAudioDirection(String dir);
     void onMicMuted(boolean mute);
-    void onNumber(String number);
+    void onTalkingNumber(String number);
+    void onIncomingNumber(String number);
+    void onOutgoingNumber(String number);
+    void onTwcHeldNumber(String number);
+    void onTwcWaitNumber(String number);
     void onAvrcpAttribute(in List<String> attr);
     void onPhonebookItem(String name, String number);
     void onHistoryItem(String type, String name, String number, String date);

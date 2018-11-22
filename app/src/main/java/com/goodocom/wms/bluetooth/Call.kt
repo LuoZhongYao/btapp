@@ -8,6 +8,5 @@ interface Call {
     fun onAudio(dir: BluetoothDevice.AudioDirection)
     fun onSignal(sig: Int)
     fun onBattchg(chg: Int)
-    fun onNumber(number: String)
     fun onMicMuted(muted: Boolean)
 }

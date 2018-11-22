@@ -27,7 +27,11 @@ interface IBluetoothService {
 	boolean IsAutoConnecte();
 	boolean IsAutoAnswer();
 
-    String DeviceNumber(String bdaddr);
+    String DeviceTalkingNumber(String bdaddr);
+    String DeviceIncomingNumber(String bdaddr);
+    String DeviceOutgoingNumber(String bdaddr);
+    String DeviceTwcHeldNumber(String bdaddr);
+    String DeviceTwcWaitNumber(String bdaddr);
 	String DeviceName(String bdaddr);
 	int DeviceSignal(String bdaddr);
 	int DeviceBattchg(String bdaddr);
@@ -40,6 +44,10 @@ interface IBluetoothService {
     long DeviceAvrcpPlaybackPos(String bdaddr);
     List<String> DeviceAvrcpAttribute(String bdaddr);
 
+    void DeviceTwcHoldActiveAnswertOther(String bdaddr);
+    void DeviceTwcReleaseActiveAnswerOther(String bdaddr);
+    void DeviceTwcReleaseHeldRejectWaiting(String bdaddr);
+    void DeviceTwcConference(String bdaddr);
     void DeviceDTMF(String bdaddr,String dtfm);
     void DeviceDial(String bdaddr,String number);
     void DeviceAudioToggle(String bdaddr);

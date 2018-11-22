@@ -17,21 +17,24 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_volume_down" />
+                android:src="@drawable/ic_volume_down"
+                android:background="@drawable/normal_button"/>
 
         <ImageView
                 android:id="@+id/iv_previous"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="40dp"
-                android:src="@drawable/ic_skip_previous" />
+                android:src="@drawable/ic_skip_previous"
+                android:background="@drawable/normal_button"/>
 
         <ImageView
                 android:id="@+id/iv_play"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="40dp"
-                android:src="@drawable/ic_play" />
+                android:src="@drawable/ic_play"
+                android:background="@drawable/normal_button"/>
 
         <ImageView
                 android:id="@+id/iv_pause"
@@ -39,21 +42,24 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="40dp"
                 android:src="@drawable/ic_pause"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="@drawable/normal_button"/>
 
         <ImageView
                 android:id="@+id/iv_next"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="40dp"
-                android:src="@drawable/ic_skip_next" />
+                android:src="@drawable/ic_skip_next"
+                android:background="@drawable/normal_button"/>
 
         <ImageView
                 android:id="@+id/iv_playlist"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="40dp"
-                android:src="@drawable/ic_playlist"/>
+                android:src="@drawable/ic_playlist"
+                android:background="@drawable/normal_button"/>
 
         <ImageView
                 android:id="@+id/iv_vol_up"
@@ -61,7 +67,8 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="40dp"
-                android:src="@drawable/ic_volume_up" />
+                android:src="@drawable/ic_volume_up"
+                android:background="@drawable/normal_button"/>
 
     </LinearLayout>
 

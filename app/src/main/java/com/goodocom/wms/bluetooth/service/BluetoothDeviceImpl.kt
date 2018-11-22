@@ -1,7 +1,9 @@
 package com.goodocom.wms.bluetooth.service
 
+import android.content.Intent
 import android.os.RemoteCallbackList
 import android.os.RemoteException
+import android.support.v4.content.ContextCompat.startActivity
 import com.goodocom.wms.bluetooth.IBluetoothDeviceCallback
 import com.goodocom.wms.bluetooth.port.BluetoothDevice
 import com.goodocom.wms.bluetooth.utils.False
@@ -28,8 +30,20 @@ class BluetoothDeviceImpl(val bdaddr: String,
         set(v) { field = v; notify{ it.onAudioDirection(v.name)} }
     override var name: String = "Bluetooth"
         set(v) { field = v; notify{ it.onName(v)}}
-    override var number: String = "10086"
-        set(v) { field = v; notify{ it.onNumber(v)}}
+    override var talkingNumber: String = ""
+        set(v) { field = v; notify{ it.onTalkingNumber(v) }}
+
+    override var incomingNumber: String = ""
+        set(v) { field = v; notify { it.onIncomingNumber(v) }}
+
+    override var outgoingNumber: String = ""
+        set(v) { field = v; notify { it.onOutgoingNumber(v) }}
+
+    override var twcHeldNumber: String = ""
+        set(v) { field = v; notify { it.onTwcHeldNumber(v) }}
+
+    override var twcWaitNumber: String = ""
+        set(v) { field = v; notify { it.onTwcWaitNumber(v) }}
 
     private var profileMap: Int = 0
         set(v) {
@@ -54,6 +68,7 @@ class BluetoothDeviceImpl(val bdaddr: String,
             field = v
             notify{ it.onHfpStatus(v.name) }
             profileMap(v >= BluetoothDevice.HfpStatus.CONNECTED, HFP)
+            (v > BluetoothDevice.HfpStatus.CONNECTED).True {  mgmt.startUI() }
         }
 
     fun hfpStatus(status: String) {
@@ -121,6 +136,10 @@ class BluetoothDeviceImpl(val bdaddr: String,
     override fun SyncHistory() = exec("PN")
     override fun CancelSync() = exec("PS")
     override fun AudioSource() = exec("AS")
+    override fun TwcConference() = exec("CT")
+    override fun TwcHoldActiveAcceptOther() = exec("CS")
+    override fun TwcReleaseActiveAnswerOther() = exec("CR")
+    override fun TwcReleaseHeldRejectWait() = exec("CQ")
 
     private fun notify(cbk: (c: IBluetoothDeviceCallback) -> Unit) {
         for( i in 0 until callback.beginBroadcast()) {

@@ -89,6 +89,12 @@ class BluetoothService : Service() {
             notify({ c, s -> c.onDMRemove(s) }, bdaddr)
             device.remove(bdaddr)
         }
+
+        fun startUI() {
+            val intent = Intent("bluetooth.UI")
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     private fun <T>notify(cbk: (c: IBluetoothCallback, arg: T) -> Unit, arg: T) {
@@ -252,7 +258,11 @@ class BluetoothService : Service() {
         override fun DisableAutoAnswer() = io.requestDisableAutoAnswer()
 
 
-        override fun DeviceNumber(bdaddr: String): String = mgmt.device[bdaddr]!!.number
+        override fun DeviceTalkingNumber(bdaddr: String): String = mgmt.device[bdaddr]!!.talkingNumber
+        override fun DeviceIncomingNumber(bdaddr: String): String = mgmt.device[bdaddr]!!.incomingNumber
+        override fun DeviceOutgoingNumber(bdaddr: String): String = mgmt.device[bdaddr]!!.outgoingNumber
+        override fun DeviceTwcWaitNumber(bdaddr: String): String = mgmt.device[bdaddr]!!.twcWaitNumber
+        override fun DeviceTwcHeldNumber(bdaddr: String): String = mgmt.device[bdaddr]!!.twcHeldNumber
         override fun DeviceName(bdaddr: String): String = mgmt.device[bdaddr]!!.name
         override fun DeviceSignal(bdaddr: String): Int = mgmt.device[bdaddr]!!.signal
         override fun DeviceBattchg(bdaddr: String): Int = mgmt.device[bdaddr]!!.battchg
@@ -264,6 +274,11 @@ class BluetoothService : Service() {
         override fun DeviceAvrcpStatus(bdaddr: String): String = mgmt.device[bdaddr]!!.avrcpStatus.name
         override fun DeviceAvrcpPlaybackPos(bdaddr: String): Long = mgmt.device[bdaddr]!!.avrcpPlaybackPos
         override fun DeviceAvrcpAttribute(bdaddr: String): List<String> = mgmt.device[bdaddr]!!.avrcpAttribute
+
+        override fun DeviceTwcHoldActiveAnswertOther(bdaddr: String) = mgmt.device[bdaddr]!!.TwcHoldActiveAcceptOther()
+        override fun DeviceTwcReleaseActiveAnswerOther(bdaddr: String) = mgmt.device[bdaddr]!!.TwcReleaseActiveAnswerOther()
+        override fun DeviceTwcReleaseHeldRejectWaiting(bdaddr: String) = mgmt.device[bdaddr]!!.TwcReleaseHeldRejectWait()
+        override fun DeviceTwcConference(bdaddr: String) = mgmt.device[bdaddr]!!.TwcConference()
 
         override fun DeviceDTMF(bdaddr: String, dtfm: String) = mgmt.device[bdaddr]!!.DTMF(dtfm)
         override fun DeviceDial(bdaddr: String, number: String) = mgmt.device[bdaddr]!!.Dial(number)
