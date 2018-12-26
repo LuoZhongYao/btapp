@@ -1,9 +1,7 @@
 package com.goodocom.wms.bluetooth.service
 
-import android.content.Intent
 import android.os.RemoteCallbackList
 import android.os.RemoteException
-import android.support.v4.content.ContextCompat.startActivity
 import com.goodocom.wms.bluetooth.IBluetoothDeviceCallback
 import com.goodocom.wms.bluetooth.port.BluetoothDevice
 import com.goodocom.wms.bluetooth.utils.False
@@ -45,30 +43,31 @@ class BluetoothDeviceImpl(val bdaddr: String,
     override var twcWaitNumber: String = ""
         set(v) { field = v; notify { it.onTwcWaitNumber(v) }}
 
-    private var profileMap: Int = 0
+    var connected: Int = 0
         set(v) {
             (field != 0 && v == 0).True { mgmt.dmRemove(bdaddr) }
             (field == 0 && v != 0).True { mgmt.dmAdd(bdaddr) }
             field = v
         }
 
-
     init {
         (bdaddr == BluetoothService.INVALID).False {
             exec("CY")
-            exec("QB")
         }
     }
 
-    private fun profileMap(cond: Boolean, bit: Int) {
-        profileMap = if(cond) profileMap or bit else profileMap and bit.inv()
+    private fun connected(cond: Boolean, bit: Int) {
+        connected = if(cond) connected or bit else connected and bit.inv()
     }
     override var hfpStatus = BluetoothDevice.HfpStatus.DISCONNECTED
         set(v) {
-            field = v
             notify{ it.onHfpStatus(v.name) }
-            profileMap(v >= BluetoothDevice.HfpStatus.CONNECTED, HFP)
+            connected(v >= BluetoothDevice.HfpStatus.CONNECTED, HFP)
             (v > BluetoothDevice.HfpStatus.CONNECTED).True {  mgmt.startUI() }
+            (v >= BluetoothDevice.HfpStatus.CONNECTED && field < BluetoothDevice.HfpStatus.CONNECTED).True {
+                exec("QB")
+            }
+            field = v
         }
 
     fun hfpStatus(status: String) {
@@ -79,7 +78,7 @@ class BluetoothDeviceImpl(val bdaddr: String,
         set(v) {
             field = v
             notify { it.onA2dpStatus(v.name) }
-            profileMap(v == BluetoothDevice.A2dpStatus.CONNECTED, A2DP)
+            connected(v == BluetoothDevice.A2dpStatus.CONNECTED, A2DP)
         }
 
     fun a2dpStatus(status: String) {
@@ -108,9 +107,9 @@ class BluetoothDeviceImpl(val bdaddr: String,
     fun historyItem(type: String, item: List<String>) = notify { it.onHistoryItem(type, item[0], item[1], item[2]) }
     fun phonebookComplete() = notify { it.onPhonebookComplete()  }
     fun historyComplete() = notify { it.onHistoryComplete()  }
-    fun browsingChangePathComplete(it: String) {}
-    fun browsingFolder(it: String) {}
-    fun browsingMedia(it: String) {}
+    fun browsingChangePathComplete(v: String) {}
+    fun browsingFolder(v: String) {}
+    fun browsingMedia(v: String) {}
 
     fun register(cbk: IBluetoothDeviceCallback) = callback.register(cbk)
     fun unregister(cbk: IBluetoothDeviceCallback) = callback.unregister(cbk)

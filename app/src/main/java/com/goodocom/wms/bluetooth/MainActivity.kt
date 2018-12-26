@@ -60,7 +60,10 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     fun dmAdd(bdaddr: String) {
         Log.i(TAG, "selected: $bdaddr, " + (bdaddr == BluetoothService.INVALID))
         if(bdaddr == BluetoothService.INVALID) {
-            device.forEach {service.devUnregister(it.value.bdaddr, it.value)}
+            device.forEach {
+                it.value.onDestroy()
+                service.devUnregister(it.value.bdaddr, it.value)
+            }
             device.clear()
             updateFragment()
         } else if (device[bdaddr] == null) {
@@ -79,7 +82,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
         Log.i(TAG, "REMOVE: $bdaddr")
         device[bdaddr]?.let {
             service.devUnregister(it.bdaddr, it)
-            device.remove(it.bdaddr)
+            device.remove(it.bdaddr)?.onDestroy()
             updateFragment()
         }
     }

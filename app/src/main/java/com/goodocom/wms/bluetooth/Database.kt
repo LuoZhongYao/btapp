@@ -7,11 +7,20 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class Database(context: Context, name: String): SQLiteOpenHelper(context, name, null, 1) {
-    override fun onCreate(db: SQLiteDatabase?) {
-        db?.let {
-            it.execSQL(SQL_CREATE_CALLLOG_TABLE)
-            it.execSQL(SQL_CREATE_PHONEBOOK_TABLE)
+    private var begin: Boolean = false
+        set(v) {
+            if(v && !field) {
+                writableDatabase.execSQL("PRAGMA synchronous = OFF")
+                writableDatabase.execSQL(SQL_CLEAR_CONTACT)
+                writableDatabase.beginTransaction()
+            } else if(!v && field) {
+                writableDatabase.setTransactionSuccessful()
+                writableDatabase.endTransaction()
+            }
+            field = v
         }
+    override fun onCreate(db: SQLiteDatabase?) {
+        db?.let { it.execSQL(SQL_CREATE_CONTACT) }
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {}
@@ -19,15 +28,15 @@ class Database(context: Context, name: String): SQLiteOpenHelper(context, name, 
         val cValue = ContentValues()
         cValue.put(COL_NAME, name)
         cValue.put(COL_NUMBER, number)
-        return writableDatabase.insert(PHONEBOOK_TABLE, null, cValue) != -1L
+        begin = true
+        return writableDatabase.insert(CONTACT, null, cValue) != -1L
     }
 
-    fun clear() {
-        writableDatabase.execSQL(SQL_CLEAR_PHONEBOOK)
-    }
+    fun commit() { begin = false }
+    fun clear() { begin = true }
 
     fun query(): Cursor? {
-        return readableDatabase.query(PHONEBOOK_TABLE,
+        return readableDatabase.query(CONTACT,
             null, null, null, null, null, null)
     }
 
@@ -51,15 +60,11 @@ class Database(context: Context, name: String): SQLiteOpenHelper(context, name, 
     }
 
     companion object {
-        private val SQL_CREATE_PHONEBOOK_TABLE = "create table if not exists phonebook(_id integer primary key autoincrement,name text,number text)"
-        private val SQL_CREATE_CALLLOG_TABLE = "create table if not exists calllog(_id integer primary key autoincrement,name text,number text,type integer)"
-        private val SQL_CLEAR_PHONEBOOK = "DELETE FROM phonebook"
-        private val SQL_CLEAR_CALLLOG = "DELETE FROM calllog"
-        private val PHONEBOOK_TABLE = "phonebook"
-        private val CALLLOG_TABLE = "calllog"
+        private const val CONTACT = "contact"
+        private const val SQL_CLEAR_CONTACT = "DELETE FROM $CONTACT"
+        private const val SQL_CREATE_CONTACT = "create table if not exists $CONTACT(_id integer primary key autoincrement,name text,number text)"
 
-        val COL_NAME = "name"
-        val COL_NUMBER = "number"
-        val COL_TYPE = "type"
+        const val COL_NAME = "name"
+        const val COL_NUMBER = "number"
     }
 }

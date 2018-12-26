@@ -8,6 +8,7 @@
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
+            android:paddingTop="10dp"
             android:orientation="vertical" >
 
         <LinearLayout
@@ -38,6 +39,7 @@
                     android:layout_weight="1"
                     android:src="@drawable/ic_phone_missed" />
         </LinearLayout>
+
 
         <FrameLayout
                 android:id="@+id/fl_content"
@@ -77,5 +79,6 @@
                     android:visibility="gone" >
             </ListView>
         </FrameLayout>
+
     </LinearLayout>
 </LinearLayout>

@@ -71,6 +71,7 @@ class ContactFragment : Fragment(), Phonebook {
                 }
             }
         }
+        dev?.let { onPhonebookComplete(it.query()) }
     }
 
     private fun complete() {

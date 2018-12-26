@@ -24,14 +24,15 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
         override fun getItem(position: Int): Any = data[position]
         override fun getItemId(position: Int): Long = position.toLong()
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            class ViewHolder(val name: TextView, val bdaddr: TextView, val delete: ImageView)
+            class ViewHolder(val name: TextView, val bdaddr: TextView, val delete: ImageView, val headset: ImageView)
             val view: View
             val holder: ViewHolder
             if (convertView == null) {
                 view = LayoutInflater.from(context!!).inflate(R.layout.pair_item, parent, false)
                 holder = ViewHolder(view.findViewById(R.id.tv_name),
                     view.findViewById(R.id.tv_bdaddr),
-                    view.findViewById(R.id.iv_delete))
+                    view.findViewById(R.id.iv_delete),
+                    view.findViewById(R.id.iv_headset))
                 view.tag = holder
             } else {
                 holder = convertView.tag as ViewHolder
@@ -39,9 +40,14 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
             }
             holder.name.text = data[position]["name"]
             holder.bdaddr.text = data[position]["bdaddr"]
+            holder.headset.tag = position
+            holder.headset.setOnClickListener {
+                data[it.tag as Int]["bdaddr"]?.let { service.ConnectA2dp(it) }
+            }
             holder.delete.tag = position
             holder.delete.setOnClickListener {
                 data[it.tag as Int]["bdaddr"]?.let {
+                    data.clear()
                     service.Delete(it)
                     service.ReadPairList()
                 }
@@ -106,7 +112,7 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
     }
 
     private fun add(index: Int, name: String, bdaddr: String) {
-        var insert: Boolean = true
+        var insert = true
         val map = HashMap<String, String>()
         map["bdaddr"] = bdaddr
         map["name"] = name

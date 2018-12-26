@@ -1,5 +1,6 @@
 package com.goodocom.wms.bluetooth
 import android.content.Context
+import android.database.Cursor
 import com.goodocom.wms.bluetooth.port.BluetoothDevice
 import com.goodocom.wms.bluetooth.service.BluetoothService
 import com.goodocom.wms.bluetooth.utils.True
@@ -17,7 +18,9 @@ class BluetoothDeviceImpl(
     var profile: Profile? = null
     private var db = Database(context, "Contact$bdaddr")
 
+    fun onDestroy() { db.commit() }
     fun query(number: String): String? = db.query(number)
+    fun query(): Cursor? = db.query()
 
     override var signal: Int
         set(v) { call?.onSignal(v) }
@@ -196,6 +199,7 @@ class BluetoothDeviceImpl(
     }
 
     override fun onPhonebookComplete() {
+        db.commit()
         book?.onPhonebookComplete(db.query())
     }
 

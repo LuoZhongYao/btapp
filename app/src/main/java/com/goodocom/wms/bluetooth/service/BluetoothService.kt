@@ -225,6 +225,7 @@ class BluetoothService : Service() {
         fun requestDisableAutoAnswer() = write("MQ")
         fun requestConnect(bdaddr: String) = write("CC$bdaddr")
         fun requestDelete(bdaddr: String) = write("CV$bdaddr")
+        fun requestConnectA2dp(bdaddr: String) = write("AC$bdaddr")
     }
 
     inner class BluetoothServiceImpl: IBluetoothService.Stub() {
@@ -233,13 +234,14 @@ class BluetoothService : Service() {
         override fun devUnregister(bdaddr: String, cbk: IBluetoothDeviceCallback) { mgmt.device[bdaddr]?.unregister(cbk) }
         override fun register(cbk: IBluetoothCallback) {
             callback.register(cbk)
-            mgmt.device.forEach { (it.key == INVALID).False{ cbk.onDMAdd(it.value.bdaddr) } }
+            mgmt.device.forEach { (it.value.connected != 0).True{ cbk.onDMAdd(it.value.bdaddr) } }
         }
         override fun unregister(cbk: IBluetoothCallback) { callback.unregister(cbk) }
 
         override fun Search() = io.requestSearch()
         override fun CancelSearch() = io.requestCancelSearch()
         override fun Connect(bdaddr: String) = io.requestConnect(bdaddr)
+        override fun ConnectA2dp(bdaddr: String) = io.requestConnectA2dp(bdaddr)
 
 
         override fun LocalName(): String = mgmt.name

@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_history.*
 class HistoryFragment : Fragment(), History {
     private var dev: BluetoothDeviceImpl? = null
     private var downloading: Boolean = false
+        set(v) {if (v) showDownloading() else showData();field = v}
     private val callin = ArrayList<Map<String, Any>>()
     private val callout = ArrayList<Map<String, Any>>()
     private val callmiss = ArrayList<Map<String, Any>>()
@@ -76,7 +77,9 @@ class HistoryFragment : Fragment(), History {
     }
 
     override fun onHfpStatus(status: HfpStatus) {
-        (status == HfpStatus.CONNECTED).True { syncHistory() }
+        (status == HfpStatus.CONNECTED).True {
+            syncHistory()
+        }
     }
 
     override fun onHistoryComplete() {
@@ -94,7 +97,7 @@ class HistoryFragment : Fragment(), History {
     }
 
     private fun showDownloading() {
-        history_downloading.visibility = View.VISIBLE
+        history_downloading?.visibility = View.VISIBLE
         val animation = TranslateAnimation(
             Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
             Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0.8f
@@ -103,12 +106,12 @@ class HistoryFragment : Fragment(), History {
         animation.fillAfter = false
         animation.repeatCount = -1
         animation.repeatMode = Animation.RESTART
-        history_animation.startAnimation(animation)
+        history_animation?.startAnimation(animation)
     }
 
     private fun showData() {
-        history_downloading.visibility = View.GONE
-        vp_history.let {
+        history_downloading?.visibility = View.GONE
+        vp_history?.let {
             it.visibility = View.VISIBLE
             it.adapter = SimpleAdapter(
                 context!!,
