@@ -56,12 +56,12 @@
                 android:text="@string/sync"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:background="@drawable/dial_key"/>
+                android:background="@drawable/button_background"/>
 
         <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_cancel"
                 android:visibility="gone"
-                android:background="@drawable/dial_key"
+                android:background="@drawable/button_background"
                 android:text="@string/cancel"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>

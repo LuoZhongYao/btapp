@@ -117,6 +117,16 @@ class BluetoothDeviceImpl(
     override fun SyncHistory() = service.DeviceSyncHistory(bdaddr)
     override fun CancelSync() = service.DeviceCancelSync(bdaddr)
     override fun AudioSource() = service.DeviceAudioSource(bdaddr)
+    override fun BrowsingNowPlayingTrack(index: Int, high: Long, low: Long, full: Int) =
+        service.DeviceBrowsingNowPlayingTrack(bdaddr, index, high, low, full)
+    override fun BrowsingRetrieveMediaPlayers(start: Int, end: Int) = service.DeviceBrowsingRetrieveMediaPlayers(bdaddr, start, end)
+    override fun BrowsingRetrieveFilesystem(start: Int, end: Int) = service.DeviceBrowsingRetrieveFilesystem(bdaddr, start, end)
+    override fun BrowsingRetrieveNowPlayingList(start: Int, end: Int) = service.DeviceBrowsingRetrieveNowPlayingList(bdaddr, start, end)
+    override fun BrowsingRetrieveNumberOfItem(scope: Int) = service.DeviceBrowsingRetrieveNumberOfItem(bdaddr, scope)
+    override fun BrowsingPlayItem(msb: Long, lsb: Long) = service.DeviceBrowsingPlayItem(bdaddr, msb, lsb)
+    override fun BrowsingChangePath(dir: Int, msb: Long, lsb: Long) = service.DeviceBrowsingChangePath(bdaddr, dir, msb, lsb)
+    override fun BrowsingAddNowPlaying(msb: Long, lsb: Long) = service.DeviceBrowsingAddNowPlaying(bdaddr, msb, lsb)
+    override fun BrowsingSetMediaPlayer(id: Int) = service.DeviceBrowsingSetMediaPlayer(bdaddr, id)
     override fun SyncPhonebook() {
         db.clear()
         service.DeviceSyncPhonebook(bdaddr)
@@ -136,6 +146,26 @@ class BluetoothDeviceImpl(
 
     override fun onAvrcpPlaybackPos(pos: Long) {
         avrcpPlaybackPos = pos
+    }
+
+    override fun onAvrcpBrowsingChangePathComplete(status: Int, num_items: Int) {
+        media?.onAvrcpBrowsingChangePathComplete(status, num_items)
+    }
+
+    override fun onAvrcpBrowsingFolder(type: Int, msb: Long, lsb: Long, display: String) {
+        media?.onAvrcpBrowsingFolder(FolderItem(display, type, msb, lsb))
+    }
+
+    override fun onAvrcpBrowsingMedia(
+        type: Int,
+        msb: Long,
+        lsb: Long,
+        display: String,
+        title: String,
+        artist: String,
+        album: String
+    ) {
+        media?.onAvrcpBrowsingMedia(MediaItem(display, type, title, artist, album, msb, lsb))
     }
 
     override fun onName(name: String) {

@@ -13,6 +13,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ListView
+import android.widget.SimpleAdapter
 import com.goodocom.wms.bluetooth.port.BluetoothDevice
 import com.goodocom.wms.bluetooth.utils.False
 import com.goodocom.wms.bluetooth.utils.True
@@ -24,6 +27,9 @@ import java.util.*
 class MusicFragment : Fragment(), Media {
     private var dev: BluetoothDeviceImpl? = null
     private var totalTime: Long = 0
+    private val data = ArrayList<Map<String, Any>>()
+    private var cur: AvrcpBrowsingItem? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +49,7 @@ class MusicFragment : Fragment(), Media {
     }
 
     private fun updateStatus(status: BluetoothDevice.AvrcpStatus) {
-        if(status == BluetoothDevice.AvrcpStatus.PLAY) {
+        if (status == BluetoothDevice.AvrcpStatus.PLAY) {
             iv_play?.visibility = View.GONE
             iv_pause?.visibility = View.VISIBLE
         } else {
@@ -53,6 +59,13 @@ class MusicFragment : Fragment(), Media {
     }
 
     private fun initView() {
+        lv_media.adapter = SimpleAdapter(
+            context!!, data, R.layout.playlist_item,
+            arrayOf("display", "type"), intArrayOf(R.id.tv_display, R.id.iv_type)
+        )
+
+
+
         dev?.let {
             updateStatus(it.avrcpStatus)
             onAvrcpAttribute(it.avrcpAttribute)
@@ -64,10 +77,30 @@ class MusicFragment : Fragment(), Media {
         iv_pause.setOnClickListener { dev?.Pause() }
         iv_next.setOnClickListener { dev?.Forward() }
         iv_previous.setOnClickListener { dev?.Backward() }
-        iv_vol_down.setOnClickListener {  }
-        iv_vol_up.setOnClickListener {  }
+        iv_back.setOnClickListener { cur?.let { dev?.BrowsingChangePath(0, it.msb, it.lsb)}}
+        iv_refresh.setOnClickListener { dev?.BrowsingRetrieveFilesystem(0, 65535) }
+        iv_vol_down.setOnClickListener { }
+        iv_vol_up.setOnClickListener { }
+        lv_media.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+            val lv = parent as ListView
+            val map: HashMap<String, Any> = lv.getItemAtPosition(position) as HashMap<String, Any>
+            val obj = map.get("obj")
+            cur = (obj as AvrcpBrowsingItem)
+            when (obj) {
+                is MediaItem -> dev?.BrowsingPlayItem(obj.msb, obj.lsb)
+                is FolderItem -> dev?.BrowsingChangePath(1, obj.msb, obj.lsb)
+            }
+        }
     }
 
+    fun add(obj: AvrcpBrowsingItem) {
+        val map = HashMap<String, Any>()
+        map.put("display", obj.display)
+        map.put("type", obj.img)
+        map.put("obj", obj)
+        data.add(map)
+        (lv_media?.adapter as SimpleAdapter?)?.notifyDataSetChanged()
+    }
 
     override fun onA2dpStatus(status: BluetoothDevice.A2dpStatus) {
 
@@ -81,18 +114,34 @@ class MusicFragment : Fragment(), Media {
     override fun onAvrcpPlaybackPos(pos: Long) {
         val fmt = SimpleDateFormat("mm:ss:SS")
         tv_currenttime?.text = fmt.format(Date(pos))
-        (totalTime != 0L).True { sb_progress?.progress =  (pos * 100 / totalTime).toInt()}
+        (totalTime != 0L).True { sb_progress?.progress = (pos * 100 / totalTime).toInt() }
 
     }
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     override fun onAvrcpAttribute(attr: List<String>) {
         val fmt = SimpleDateFormat("mm:ss:SS")
-        attr[2].isEmpty().False { totalTime = attr[2].toLong()}
+        attr[2].isEmpty().False { totalTime = attr[2].toLong() }
         tv_music_name?.text = attr[0]
         tv_music_artist?.text = attr[1]
         tv_totaltime?.text = fmt.format(Date(totalTime))
         tv_music_posandtotal?.text = attr[3] + "/" + attr[4]
+    }
+
+    override fun onAvrcpBrowsingChangePathComplete(status: Int, num_items: Int) {
+        if (status == 0) {
+            data.clear()
+            dev?.BrowsingRetrieveFilesystem(0, num_items)
+            (lv_media?.adapter as SimpleAdapter?)?.notifyDataSetChanged()
+        }
+    }
+
+    override fun onAvrcpBrowsingFolder(folder: FolderItem) {
+        add(folder)
+    }
+
+    override fun onAvrcpBrowsingMedia(media: MediaItem) {
+        add(media)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -103,5 +152,4 @@ class MusicFragment : Fragment(), Media {
     companion object {
         private const val TAG = "btapp"
     }
-
 }

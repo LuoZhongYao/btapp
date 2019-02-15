@@ -28,7 +28,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:background="@drawable/dial_display_broder">
+                android:background="@drawable/button_broder">
             <TextView
                     android:id="@+id/tv_display"
                     android:gravity="start"
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="4"
-                android:background="@drawable/dial_display_broder">
+                android:background="@drawable/button_broder">
             <TableLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">

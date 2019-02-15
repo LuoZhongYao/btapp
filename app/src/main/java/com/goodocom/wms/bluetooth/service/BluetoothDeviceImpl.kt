@@ -107,9 +107,17 @@ class BluetoothDeviceImpl(val bdaddr: String,
     fun historyItem(type: String, item: List<String>) = notify { it.onHistoryItem(type, item[0], item[1], item[2]) }
     fun phonebookComplete() = notify { it.onPhonebookComplete()  }
     fun historyComplete() = notify { it.onHistoryComplete()  }
-    fun browsingChangePathComplete(v: String) {}
-    fun browsingFolder(v: String) {}
-    fun browsingMedia(v: String) {}
+    fun browsingChangePathComplete(status: String, num_items: String) {
+        notify { it.onAvrcpBrowsingChangePathComplete(status.toInt(), num_items.toInt()) }
+    }
+
+    fun browsingFolder(type: String, msb: String, lsb: String, display: String) {
+        notify { it.onAvrcpBrowsingFolder(type.toInt(), msb.toLong(), lsb.toLong(), display) }
+    }
+
+    fun browsingMedia(type: String, msb: String, lsb: String, display: String, title: String, artist: String, album: String) {
+        notify { it.onAvrcpBrowsingMedia(type.toInt(), msb.toLong(), lsb.toLong(), display, title, artist, album) }
+    }
 
     fun register(cbk: IBluetoothDeviceCallback) = callback.register(cbk)
     fun unregister(cbk: IBluetoothDeviceCallback) = callback.unregister(cbk)
@@ -139,6 +147,15 @@ class BluetoothDeviceImpl(val bdaddr: String,
     override fun TwcHoldActiveAcceptOther() = exec("CS")
     override fun TwcReleaseActiveAnswerOther() = exec("CR")
     override fun TwcReleaseHeldRejectWait() = exec("CQ")
+    override fun BrowsingNowPlayingTrack(index: Int, high: Long, low: Long, full: Int) = exec("Me$index,$high,$low,$full")
+    override fun BrowsingRetrieveMediaPlayers(start: Int, end: Int) = exec("Mm$start,$end")
+    override fun BrowsingRetrieveFilesystem(start: Int, end: Int) = exec("Mf$start,$end")
+    override fun BrowsingRetrieveNowPlayingList(start: Int, end: Int) = exec("Ml$start,$end")
+    override fun BrowsingRetrieveNumberOfItem(scope: Int) = exec("Mn$scope")
+    override fun BrowsingPlayItem(msb: Long, lsb: Long) = exec("Mp$msb,$lsb")
+    override fun BrowsingChangePath(dir: Int, msb: Long, lsb: Long) = exec("Mc$dir,$msb,$lsb")
+    override fun BrowsingAddNowPlaying(msb: Long, lsb: Long) = exec("Ma$msb,$lsb")
+    override fun BrowsingSetMediaPlayer(id: Int) = exec("Ms$id")
 
     private fun notify(cbk: (c: IBluetoothDeviceCallback) -> Unit) {
         for( i in 0 until callback.beginBroadcast()) {

@@ -17,7 +17,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
                 android:name=".MainActivity"
-                android:launchMode="singleInstance">
+                android:launchMode="singleInstance"
+                android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

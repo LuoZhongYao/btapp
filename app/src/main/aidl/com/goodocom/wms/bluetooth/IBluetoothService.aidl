@@ -60,6 +60,15 @@ interface IBluetoothService {
     void DevicePause(String bdaddr);
     void DevicePlay(String bdaddr);
     void DeviceStop(String bdaddr);
+    void DeviceBrowsingNowPlayingTrack(String bdaddr, int index, long high, long low, int full);
+    void DeviceBrowsingRetrieveMediaPlayers(String bdaddr, int start, int end);
+    void DeviceBrowsingRetrieveFilesystem(String bdaddr, int start, int end);
+    void DeviceBrowsingRetrieveNowPlayingList(String bdaddr, int start, int end);
+    void DeviceBrowsingRetrieveNumberOfItem(String bdaddr, int scope);
+    void DeviceBrowsingPlayItem(String bdaddr, long msb, long lsb);
+    void DeviceBrowsingChangePath(String baddr, int dir, long msb, long lsb);
+    void DeviceBrowsingAddNowPlaying(String bdaddr, long msb, long lsb);
+    void DeviceBrowsingSetMediaPlayer(String bdaddr, int id);
     void DeviceMicToggle(String bdaddr);
     void DeviceVoiceToggle(String bdaddr);
     void DeviceDisconnect(String bdaddr);

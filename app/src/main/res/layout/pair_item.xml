@@ -10,7 +10,8 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_delete"
             android:layout_marginEnd="5dp"
-            android:id="@+id/iv_delete"/>
+            android:id="@+id/iv_delete"
+            android:background="@drawable/button_background"/>
 
     <LinearLayout
             android:layout_weight="1"
@@ -36,6 +37,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_headset"
             android:layout_marginEnd="5dp"
-            android:id="@+id/iv_headset"/>
+            android:id="@+id/iv_headset"
+            android:background="@drawable/button_background"/>
 
 </LinearLayout>

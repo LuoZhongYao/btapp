@@ -293,6 +293,7 @@ class BluetoothService : Service() {
         override fun DevicePause(bdaddr: String) = mgmt.device[bdaddr]!!.Pause()
         override fun DevicePlay(bdaddr: String) = mgmt.device[bdaddr]!!.Play()
         override fun DeviceStop(bdaddr: String) = mgmt.device[bdaddr]!!.Stop()
+
         override fun DeviceMicToggle(bdaddr: String) = mgmt.device[bdaddr]!!.MicToggle()
         override fun DeviceVoiceToggle(bdaddr: String) = mgmt.device[bdaddr]!!.VoiceToggle()
         override fun DeviceDisconnect(bdaddr: String) = mgmt.device[bdaddr]!!.Disconnect()
@@ -300,5 +301,42 @@ class BluetoothService : Service() {
         override fun DeviceSyncPhonebook(bdaddr: String) = mgmt.device[bdaddr]!!.SyncPhonebook()
         override fun DeviceCancelSync(bdaddr: String) = mgmt.device[bdaddr]!!.CancelSync()
         override fun DeviceAudioSource(bdaddr: String) = mgmt.device[bdaddr]!!.AudioSource()
+
+        override fun DeviceBrowsingNowPlayingTrack(bdaddr: String, index: Int, high: Long, low: Long, full: Int) {
+            mgmt.device[bdaddr]!!.BrowsingNowPlayingTrack(index, high, low, full)
+        }
+
+        override fun DeviceBrowsingRetrieveMediaPlayers(bdaddr: String, start: Int, end: Int) {
+            mgmt.device[bdaddr]!!.BrowsingRetrieveMediaPlayers(start, end)
+        }
+
+        override fun DeviceBrowsingRetrieveFilesystem(bdaddr: String, start: Int, end: Int) {
+            mgmt.device[bdaddr]!!.BrowsingRetrieveFilesystem(start, end)
+        }
+
+        override fun DeviceBrowsingRetrieveNowPlayingList(bdaddr: String, start: Int, end: Int) {
+            mgmt.device[bdaddr]!!.BrowsingRetrieveNowPlayingList(start, end)
+        }
+
+        override fun DeviceBrowsingRetrieveNumberOfItem(bdaddr: String, scope: Int) {
+            mgmt.device[bdaddr]!!.BrowsingRetrieveNumberOfItem(scope)
+        }
+
+        override fun DeviceBrowsingPlayItem(bdaddr: String, msb: Long, lsb: Long) {
+            mgmt.device[bdaddr]!!.BrowsingPlayItem(msb, lsb)
+        }
+
+        override fun DeviceBrowsingChangePath(bdaddr: String, dir: Int, msb: Long, lsb: Long) {
+            mgmt.device[bdaddr]!!.BrowsingChangePath(dir, msb, lsb)
+        }
+
+        override fun DeviceBrowsingAddNowPlaying(bdaddr: String, msb: Long, lsb: Long) {
+            mgmt.device[bdaddr]!!.BrowsingAddNowPlaying(msb, lsb)
+        }
+
+        override fun DeviceBrowsingSetMediaPlayer(bdaddr: String, id: Int) {
+            mgmt.device[bdaddr]!!.BrowsingSetMediaPlayer(id)
+        }
+
     }
 }

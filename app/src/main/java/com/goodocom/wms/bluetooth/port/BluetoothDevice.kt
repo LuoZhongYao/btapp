@@ -59,4 +59,14 @@ interface BluetoothDevice {
     fun SyncHistory()
     fun CancelSync()
     fun AudioSource()
+
+    fun BrowsingNowPlayingTrack(index: Int, high: Long, low: Long, full: Int)
+    fun BrowsingRetrieveMediaPlayers(start: Int, end: Int)
+    fun BrowsingRetrieveFilesystem(start: Int, end: Int)
+    fun BrowsingRetrieveNowPlayingList(start: Int, end: Int)
+    fun BrowsingRetrieveNumberOfItem(scope: Int)
+    fun BrowsingPlayItem(msb: Long, lsb: Long)
+    fun BrowsingChangePath(dir: Int, msb: Long, lsb: Long)
+    fun BrowsingAddNowPlaying(msb: Long, lsb: Long)
+    fun BrowsingSetMediaPlayer(id: Int)
 }

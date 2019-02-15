@@ -12,6 +12,7 @@ import com.goodocom.wms.bluetooth.port.BluetoothDevice.*
 import com.goodocom.wms.bluetooth.utils.True
 import kotlinx.android.synthetic.main.fragment_history.*
 
+
 class HistoryFragment : Fragment(), History {
     private var dev: BluetoothDeviceImpl? = null
     private var downloading: Boolean = false
@@ -19,6 +20,8 @@ class HistoryFragment : Fragment(), History {
     private val callin = ArrayList<Map<String, Any>>()
     private val callout = ArrayList<Map<String, Any>>()
     private val callmiss = ArrayList<Map<String, Any>>()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -50,6 +50,7 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
                     data.clear()
                     service.Delete(it)
                     service.ReadPairList()
+                    notifyDataSetChanged()
                 }
             }
 
