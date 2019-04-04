@@ -226,6 +226,7 @@ class BluetoothService : Service() {
         fun requestConnect(bdaddr: String) = write("CC$bdaddr")
         fun requestDelete(bdaddr: String) = write("CV$bdaddr")
         fun requestConnectA2dp(bdaddr: String) = write("AC$bdaddr")
+        fun requestConnectAghfp(bdaddr: String) = write("GC$bdaddr")
     }
 
     inner class BluetoothServiceImpl: IBluetoothService.Stub() {
@@ -242,6 +243,7 @@ class BluetoothService : Service() {
         override fun CancelSearch() = io.requestCancelSearch()
         override fun Connect(bdaddr: String) = io.requestConnect(bdaddr)
         override fun ConnectA2dp(bdaddr: String) = io.requestConnectA2dp(bdaddr)
+        override fun ConnectAghfp(bdaddr: String) = io.requestConnectAghfp(bdaddr)
 
 
         override fun LocalName(): String = mgmt.name

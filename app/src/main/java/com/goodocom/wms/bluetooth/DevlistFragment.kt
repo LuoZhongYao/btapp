@@ -24,7 +24,8 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
         override fun getItem(position: Int): Any = data[position]
         override fun getItemId(position: Int): Long = position.toLong()
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            class ViewHolder(val name: TextView, val bdaddr: TextView, val delete: ImageView, val headset: ImageView)
+            class ViewHolder(val name: TextView, val bdaddr: TextView, val delete: ImageView,
+                             val headset: ImageView, val a2dp: ImageView)
             val view: View
             val holder: ViewHolder
             if (convertView == null) {
@@ -32,7 +33,8 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
                 holder = ViewHolder(view.findViewById(R.id.tv_name),
                     view.findViewById(R.id.tv_bdaddr),
                     view.findViewById(R.id.iv_delete),
-                    view.findViewById(R.id.iv_headset))
+                    view.findViewById(R.id.iv_headset),
+                    view.findViewById(R.id.iv_music))
                 view.tag = holder
             } else {
                 holder = convertView.tag as ViewHolder
@@ -42,6 +44,10 @@ class DevlistFragment : Fragment(), DeviceList, FragmentId {
             holder.bdaddr.text = data[position]["bdaddr"]
             holder.headset.tag = position
             holder.headset.setOnClickListener {
+                data[it.tag as Int]["bdaddr"]?.let { service.ConnectAghfp(it) }
+            }
+            holder.a2dp.tag = position
+            holder.a2dp.setOnClickListener {
                 data[it.tag as Int]["bdaddr"]?.let { service.ConnectA2dp(it) }
             }
             holder.delete.tag = position

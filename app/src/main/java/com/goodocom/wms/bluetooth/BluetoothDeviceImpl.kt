@@ -165,7 +165,11 @@ class BluetoothDeviceImpl(
         artist: String,
         album: String
     ) {
-        media?.onAvrcpBrowsingMedia(MediaItem(display, type, title, artist, album, msb, lsb))
+        media?.onAvrcpBrowsingMedia(MediaItem(display, type, msb, lsb, title, artist, album))
+    }
+
+    override fun onAvrcpBrowsingMediaPlayer(id: Int, play_status: Int, major: Int, subtype: Int, display: String) {
+        media?.onAvrcpBrowsingMediaPlayer(MediaPlayerItem(display, id, play_status, major, subtype))
     }
 
     override fun onName(name: String) {

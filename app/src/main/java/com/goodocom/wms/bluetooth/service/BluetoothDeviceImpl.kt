@@ -119,6 +119,10 @@ class BluetoothDeviceImpl(val bdaddr: String,
         notify { it.onAvrcpBrowsingMedia(type.toInt(), msb.toLong(), lsb.toLong(), display, title, artist, album) }
     }
 
+    fun browsingMediaPlayer(id: String, play_status: String, major: String, subtype: String, display: String) {
+        notify { it.onAvrcpBrowsingMediaPlayer(id.toInt(), play_status.toInt(), major.toInt(), subtype.toInt(), display) }
+    }
+
     fun register(cbk: IBluetoothDeviceCallback) = callback.register(cbk)
     fun unregister(cbk: IBluetoothDeviceCallback) = callback.unregister(cbk)
 

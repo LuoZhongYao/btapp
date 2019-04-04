@@ -28,7 +28,7 @@ class MusicFragment : Fragment(), Media {
     private var dev: BluetoothDeviceImpl? = null
     private var totalTime: Long = 0
     private val data = ArrayList<Map<String, Any>>()
-    private var cur: AvrcpBrowsingItem? = null
+    private var cur: AvrcpBrowsingUid? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,17 +78,22 @@ class MusicFragment : Fragment(), Media {
         iv_next.setOnClickListener { dev?.Forward() }
         iv_previous.setOnClickListener { dev?.Backward() }
         iv_back.setOnClickListener { cur?.let { dev?.BrowsingChangePath(0, it.msb, it.lsb)}}
-        iv_refresh.setOnClickListener { dev?.BrowsingRetrieveFilesystem(0, 65535) }
+        iv_refresh.setOnClickListener {
+            data.clear()
+            (lv_media?.adapter as SimpleAdapter?)?.notifyDataSetChanged()
+            dev?.BrowsingRetrieveFilesystem(0, 65535)
+        }
         iv_vol_down.setOnClickListener { }
         iv_vol_up.setOnClickListener { }
         lv_media.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val lv = parent as ListView
             val map: HashMap<String, Any> = lv.getItemAtPosition(position) as HashMap<String, Any>
             val obj = map.get("obj")
-            cur = (obj as AvrcpBrowsingItem)
+            (obj is AvrcpBrowsingUid).True { cur = obj as AvrcpBrowsingUid }
             when (obj) {
                 is MediaItem -> dev?.BrowsingPlayItem(obj.msb, obj.lsb)
                 is FolderItem -> dev?.BrowsingChangePath(1, obj.msb, obj.lsb)
+                is MediaPlayerItem -> dev?.BrowsingSetMediaPlayer(obj.id)
             }
         }
     }
@@ -142,6 +147,10 @@ class MusicFragment : Fragment(), Media {
 
     override fun onAvrcpBrowsingMedia(media: MediaItem) {
         add(media)
+    }
+
+    override fun onAvrcpBrowsingMediaPlayer(player: MediaPlayerItem) {
+        add(player)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

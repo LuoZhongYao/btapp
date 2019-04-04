@@ -21,6 +21,7 @@ interface IBluetoothService {
 	void CancelSearch();
 	void Connect(String bdaddr);
 	void ConnectA2dp(String bdaddr);
+	void ConnectAghfp(String baddr);
 	void EnableAutoConnect();
 	void DisableAutoConnect();
 	void EnableAutoAnswer();

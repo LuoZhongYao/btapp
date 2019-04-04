@@ -35,6 +35,14 @@
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:src="@drawable/ic_a2dp"
+            android:layout_marginEnd="5dp"
+            android:id="@+id/iv_music"
+            android:background="@drawable/button_background"/>
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_headset"
             android:layout_marginEnd="5dp"
             android:id="@+id/iv_headset"

@@ -15,6 +15,7 @@ interface IBluetoothDeviceCallback {
     void onAvrcpBrowsingChangePathComplete(int status, int num_items);
     void onAvrcpBrowsingFolder(int type, long msb, long lsb, String display);
     void onAvrcpBrowsingMedia(int type, long msb, long lsb, String display, String title, String artist, String album);
+    void onAvrcpBrowsingMediaPlayer(int id, int play_status, int major, int subtype, String display);
     void onAudioDirection(String dir);
     void onMicMuted(boolean mute);
     void onTalkingNumber(String number);
